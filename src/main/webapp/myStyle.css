@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+#sangBox, #coll {
+	background-color: white;
+	border-radius: 20px;
+	margin-right: 20px;
+	margin-left: 20px;
+	padding: 5%;
+}
+
+#titleLine {
+	padding-top: 3% !important;
+	padding-bottom: 1% !important;
+}

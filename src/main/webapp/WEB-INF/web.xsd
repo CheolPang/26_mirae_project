@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="web-app">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="security-role">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="description" />
+							<xs:element name="role-name" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="security-constraint">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="display-name" type="xs:string" />
+							<xs:element name="web-resouce-collection">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="web-resource-name" type="xs:string" />
+										<xs:element name="url-pattern" type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="auth-constraint">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="description" type="xs:string" />
+							<xs:element name="role-name" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="login-config">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="auth-method" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
