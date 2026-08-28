@@ -44,14 +44,13 @@
 				<p><b class="cs-bold cs-small">분류 </b> <%=product.getCategory() %></p>
 				<p><b class="cs-bold cs-small">재고 수 </b> <%=dfR2 %></p>
 				<p><b class="cs-bold cs-small">상품 가격 </b> <%=dfR1 %></p>
-				<p>
-					<form action="addCart.jsp?id=<%=product.getProductId()%>" name="addForm" method="post">
-						<a href="#" class="btn btn-primary btn-sm">상품 주문</a>
-						<a href="./cart.jsp" class="btn btn-primary btn-sm">장바구니 바로가기</a>
-						<input href="#" class="btn btn-primary btn-sm" onclick="addToCart()" value="장바구니에 담기"></input>
-						<a href="./products.jsp" class="btn btn-light btn-sm">상품 목록 &raquo;</a>
-					</form>
-				</p>
+				<form action="addCart.jsp" name="addForm" method="post" class="d-flex flex-wrap gap-2">
+					<input type="hidden" name="id" value="<%=product.getProductId()%>">
+					<button type="button" class="btn btn-primary btn-sm">상품 주문</button>
+					<a href="./cart.jsp" class="btn btn-primary btn-sm" role="button">장바구니 바로가기</a>
+					<button type="button" class="btn btn-primary btn-sm" onclick="addToCart()">장바구니에 담기</button>
+					<a href="./products.jsp" class="btn btn-secondary btn-sm" role="button">상품 목록 &raquo;</a>
+				</form>
 			</div>
 		</div>
 	</div>

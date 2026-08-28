@@ -14,7 +14,7 @@
 </head>
 <body>
 <!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
 				<a class="navbar-brand" href="welcome.jsp">CPShop<span>.</span></a>
@@ -66,11 +66,21 @@
 						<li><a class="nav-link" href="products.jsp">상품 목록</a><!-- products list --></li>
 						<li><a class="nav-link" href="addProduct.jsp">상품 등록</a></li><!-- products register-->
 						<li><a class="nav-link" href="about.html">문의</a></li><!-- contact -->
+
 						        <li class="nav-item dropdown">
-						          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						            마이페이지
+						          <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						            언어
 						          </a>
-						          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+						          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarLangDropdownLink">
+						            <li><a class="dropdown-item" href="?language=ko">Korean</a></li>
+						            <li><a class="dropdown-item" href="?language=en">English</a></li>
+						          </ul>
+						        </li>
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarMyPageDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#"><img src="images/user.svg"></a>
+							<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarMyPageDropdownLink">
 						            <li><a class="dropdown-item" href="login.jsp">회원 로그인</a></li>
 						            <li><a class="dropdown-item" href="logout.jsp">회원 로그아웃</a></li>
 						            <li><a class="dropdown-item" href="#">회원 가입</a></li>
@@ -78,24 +88,11 @@
 						            <li><hr class="dropdown-divider"></li>
 						            <li><a class="dropdown-item" href="#">주문 정보</a></li>
 						            <li><a class="dropdown-item" href="#">배송 정보</a></li>
-						          </ul>
-						        </li>
-						        <li class="nav-item dropdown">
-						          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						            언어
-						          </a>
-						          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-						            <li><a class="dropdown-item" href="?language=ko">Korean</a></li>
-						            <li><a class="dropdown-item" href="?language=en">English</a></li>
-						          </ul>
-						        </li>
+							</ul>
+						</li>
+						<li><a class="nav-link" href="cart.jsp"><img src="images/cart.svg"></a></li>
+					</ul>
 				</div>
-					</ul>
-
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
-						<li><a class="nav-link" href="cart.html"><img src="images/cart.svg"></a></li>
-					</ul>
 
 			</div>
 				

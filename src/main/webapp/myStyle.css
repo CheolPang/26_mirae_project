@@ -12,3 +12,35 @@
 	padding-top: 3% !important;
 	padding-bottom: 1% !important;
 }
+
+/* ---------------------------------------------------------------
+   Bootstrap 버튼 variant 복구
+   style.css:161 의 `.btn { background:#2f2f2f }` 이 명시도 동점(0,1,0)에
+   나중 선언이라 부트스트랩의 .btn-danger 등을 덮어씀.
+   style.css 가 재정의한 것은 primary / secondary / white-outline 뿐이므로
+   빠진 variant 를 .btn.xxx (0,2,0) 로 여기서 되살린다.
+   (myStyle.css 는 menu.jsp 에서 style.css 다음에 로드됨)
+   --------------------------------------------------------------- */
+.btn.btn-danger {
+	background: #dc3545;
+	border-color: #dc3545;
+	color: #ffffff;
+}
+.btn.btn-danger:hover {
+	background: #bb2d3b;
+	border-color: #b02a37;
+	color: #ffffff;
+}
+
+/* style.css:683 의 `.site-blocks-table .btn { background:none !important }` 가
+   표 안의 삭제 버튼 배경까지 지워버리므로 여기서만 다시 칠한다. */
+.site-blocks-table .btn.btn-danger {
+	background: #dc3545 !important;
+	border: 1px solid #dc3545;
+	color: #ffffff;
+}
+.site-blocks-table .btn.btn-danger:hover {
+	background: #bb2d3b !important;
+	border-color: #b02a37;
+	color: #ffffff;
+}

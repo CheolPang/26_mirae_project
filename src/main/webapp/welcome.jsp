@@ -22,7 +22,7 @@
 									<div class="intro-excerpt">
 										<h1><fmt:message key="wtitle-1"/><br><fmt:message key="wtitle-2"/></h1>
 										<p class="mb-4"><fmt:message key="wtitle-se"/></p>
-										<p><a href="" class="btn btn-white-outline me-2"><fmt:message key="product-list"/></a><a href="#" class="btn btn-white-outline"><fmt:message key="report"/></a></p>
+										<p><a href="products.jsp" class="btn btn-white-outline me-2" role="button"><fmt:message key="product-list"/></a><a href="#" class="btn btn-white-outline"><fmt:message key="report"/></a></p>
 									</div>
 								</div>
 								<div class="col-lg-7">
@@ -44,7 +44,7 @@
 							<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
 								<h2 class="mb-4 section-title"><fmt:message key="popular-list"/></h2>
 								<p class="mb-4"><fmt:message key="popular-se"/></p>
-								<p><a href="shop.html" class="btn"><fmt:message key="deabogi"/></a></p>
+								<p><a href="products.jsp" class="btn" role="button"><fmt:message key="deabogi"/></a></p>
 							</div> 
 							<!-- End Column 1 -->
 		

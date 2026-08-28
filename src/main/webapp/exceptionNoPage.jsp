@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="col p-5 flexcenter">
 					<h2>페이지를 찾을 수 없습니다.</h2>
-					<a href="./products.jsp"><button class="btn btn-primary">상품 목록</button></a>
+					<a href="./products.jsp" class="btn btn-primary" role="button">상품 목록</a>
 				</div>
 			</div>
 		</div>
