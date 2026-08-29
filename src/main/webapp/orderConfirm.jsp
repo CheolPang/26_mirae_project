@@ -1,14 +1,50 @@
 <%@page import="dto.Product"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CPShop | Cart</title>
+<title>CPShop | 배송 확인</title>
 </head>
 <body>
+	<%
+		request.setCharacterEncoding("UTF-8");
+		
+		String Shipping_cartId = "";
+		String Shipping_name = "";
+		String Shipping_date = "";
+		String Shipping_address = "";
+		String Shipping_postId = "";
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie thisCookie = cookies[i];
+				String n = thisCookie.getName();
+				if(n.equals("Shipping_cartId")) {
+					Shipping_cartId = URLDecoder.decode(thisCookie.getValue(), "UTF-8");
+				}
+				if(n.equals("Shipping_name")) {
+					Shipping_name = URLDecoder.decode(thisCookie.getValue(), "UTF-8");
+				}
+				if(n.equals("Shipping_date")) {
+					Shipping_date = URLDecoder.decode(thisCookie.getValue(), "UTF-8");
+				}
+				if(n.equals("Shipping_address")) {
+					Shipping_address = URLDecoder.decode(thisCookie.getValue(), "UTF-8");
+				}
+				if(n.equals("Shipping_postId")) {
+					Shipping_postId = URLDecoder.decode(thisCookie.getValue(), "UTF-8");
+				}
+			}
+		}
+		
+		
+	%>
+
 	<%@ include file="menu.jsp"%>
 	<!-- Start Hero Section -->
 	<div class="hero">
@@ -16,7 +52,7 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>장바구니</h1>
+						<h1>주문 정보</h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
@@ -25,7 +61,19 @@
 	</div>
 	<!-- End Hero Section -->
 	<div class="untree_co-section before-footer-section">
+
 		<div class="container">
+			<h2 class="text-center mb-5">영수증</h2>
+			<div class="row">
+				<div class="col-4 text-left">
+					<strong>배송 주소 : <br> 성명 | <%=Shipping_name %> <br>
+						우편번호 | <%=Shipping_postId %> <br> 세부주소 | <%=Shipping_address %>
+					</strong>
+				</div>
+				<div class="col-4 text-right">
+					<strong>배송일 : <br> 배송예정날짜 | <%=Shipping_date %></strong>
+				</div>
+			</div>
 			<div class="row mb-5">
 				<form class="col-md-12" method="post">
 					<div class="site-blocks-table">
@@ -36,7 +84,6 @@
 									<th class="product-price">가격</th>
 									<th class="product-quantity">수량</th>
 									<th class="product-total">소계</th>
-									<th class="product-total">비고</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -60,9 +107,6 @@
 									<td><%=product.getUnitPrice() %></td>
 									<td><%=product.getQuantity() %></td>
 									<td><%=total %></td>
-									<td><a
-										href="./removeCart.jsp?id=<%=product.getProductId() %>"
-										class="btn btn-danger">삭제</a></td>
 								</tr>
 
 								<%
@@ -77,7 +121,6 @@
 									<td><h5>
 											<b><%=sum %></b>
 										</h5></td>
-									<td></td>
 								</tr>
 							</tbody>
 						</table>
@@ -90,10 +133,10 @@
 			<%
               	String cartId = session.getId();
               %>
-			<a href="./deleteCart.jsp?cartId=<%=cartId %>"
-				class="btn btn-danger float-end">장바구니 비우기</a> <a
-				href="./shippingInfo.jsp?cartId=<%=cartId %>"
-				class="btn btn-primary float-end mx-2">주문하기</a>
+			<a href="./checkOutCancelled.jsp" class="btn btn-danger float-end">취소</a>
+			<a href="./shippingInfo.jsp?cartId=<%=cartId %>"
+				class="btn btn-dark float-end mx-2">이전</a> <a
+				href="./thanksCustomer.jsp" class="btn btn-primary float-end mx-3">주문완료</a>
 		</div>
 	</div>
 	<%@ include file="footer.jsp"%>
