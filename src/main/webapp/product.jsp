@@ -14,6 +14,7 @@
 </head>
 <body>
 	<%@ include file="menu.jsp" %>
+	<%@ include file="dbconn.jsp" %>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="bg-Secondary">
@@ -26,26 +27,31 @@
 		</div>
 	</div>
 	<%
-		ProductRepository dao = ProductRepository.getInstance();
+		//ProductRepository dao = ProductRepository.getInstance();
 		String id = request.getParameter("id");
-		Product product = dao.getProductById(id);
+		//Product product = dao.getProductById(id);
 		DecimalFormat df = new DecimalFormat("#,##0");
-		String dfR1 = df.format(product.getUnitPrice());
-		String dfR2 = df.format(product.getUnitsInStock());
+		//String dfR1 = df.format(product.getUnitPrice());
+		//String dfR2 = df.format(product.getUnitsInStock());
+		String sql = "SELECT * from bs_product WHERE p_id=?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		rs = pstmt.executeQuery();
+		while(rs.next()) {
 	%>
 	<div class="container">
 		<div class="row p-3">
 			<div class="col bg-light p-5" id="sangBox">
-				<h3><%=product.getPname() %></h3>
-				<img alt="" src="${pageContext.request.contextPath}/upload/<%=product.getFilename()%>" class="img-fluid"/>
-				<p class="cs-bold cs-small"><%=product.getDescription() %></p>
-				<p><b class="cs-bold cs-small">상품 코드 </b> <%=product.getProductId() %></p>
-				<p><b class="cs-bold cs-small">제조사 </b> <%=product.getManufacturer() %></p>
-				<p><b class="cs-bold cs-small">분류 </b> <%=product.getCategory() %></p>
-				<p><b class="cs-bold cs-small">재고 수 </b> <%=dfR2 %></p>
-				<p><b class="cs-bold cs-small">상품 가격 </b> <%=dfR1 %></p>
+				<h3><%=rs.getString("p_name") %></h3>
+				<img alt="" src="${pageContext.request.contextPath}/upload/<%=rs.getString("p_fileName")%>" class="img-fluid"/>
+				<p class="cs-bold cs-small"><%=rs.getString("p_description") %></p>
+				<p><b class="cs-bold cs-small">상품 코드 </b> <%=rs.getString("p_id") %></p>
+				<p><b class="cs-bold cs-small">제조사 </b> <%=rs.getString("p_manufacturer") %></p>
+				<p><b class="cs-bold cs-small">분류 </b> <%=rs.getString("p_category") %></p>
+				<p><b class="cs-bold cs-small">재고 수 </b> <%=rs.getInt("p_unitsInStock") %></p>
+				<p><b class="cs-bold cs-small">상품 가격 </b> <%=rs.getInt("p_unitPrice") %></p>
 				<form action="addCart.jsp" name="addForm" method="post" class="d-flex flex-wrap gap-2">
-					<input type="hidden" name="id" value="<%=product.getProductId()%>">
+					<input type="hidden" name="id" value="<%=rs.getString("p_id")%>">
 					<button type="button" class="btn btn-primary btn-sm">상품 주문</button>
 					<a href="./cart.jsp" class="btn btn-primary btn-sm" role="button">장바구니 바로가기</a>
 					<button type="button" class="btn btn-primary btn-sm" onclick="addToCart()">장바구니에 담기</button>
@@ -54,6 +60,12 @@
 			</div>
 		</div>
 	</div>
+			<%
+				}
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			%>
 	<%@ include file="footer.jsp" %>
 </body>
 </html>

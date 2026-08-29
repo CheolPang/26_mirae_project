@@ -12,6 +12,7 @@
 <title>CPShop | processAddProduct</title>
 </head>
 <body>
+	<%@ include file="dbconn.jsp" %>
 	<%
 		request.setCharacterEncoding("UTF-8");
 	
@@ -31,7 +32,7 @@
 		String unitsInStock = multi.getParameter("unitsInStock");
 		String condition = multi.getParameter("condition");
 		
-		Integer price;
+		int price;
 		if(unitPrice.isEmpty()) {
 			price = 0;
 		} else {
@@ -49,20 +50,28 @@
 		String frame = (String) files.nextElement();
 		String fileName = multi.getFilesystemName(frame);
 		
-		ProductRepository dao = ProductRepository.getInstance();
+//		ProductRepository dao = ProductRepository.getInstance();
 		
 		Product newProduct = new Product();
-		newProduct.setProductId(productId);
-		newProduct.setPname(productName);
-		newProduct.setUnitPrice(price);
-		newProduct.setDescription(description);
-		newProduct.setManufacturer(manufacturer);
-		newProduct.setCategory(category);
-		newProduct.setUnitsInStock(stock);
-		newProduct.setCondition(condition);
-		newProduct.setFilename(fileName);
+		String sql = "INSERT INTO bs_product VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 		
-		dao.addProduct(newProduct);
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setString(1, productId);
+		pstmt.setString(2, productName);
+		pstmt.setInt(3, price);
+		pstmt.setString(4, description);
+		pstmt.setString(5, category);
+		pstmt.setString(6, manufacturer);
+		pstmt.setLong(7, stock);
+		pstmt.setString(8, condition);
+		pstmt.setString(9, fileName);
+		
+		pstmt.executeUpdate();
+		if(pstmt != null) pstmt.close();
+		if(conn != null) conn.close();
+		
+//		dao.addProduct(newProduct);
 		response.sendRedirect("products.jsp");
 	%>
 </body>
