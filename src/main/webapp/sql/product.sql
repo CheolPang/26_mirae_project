@@ -31,4 +31,8 @@ purge recyclebin;
 select * from tab;
 --테이블 데이터 확인
 select * from bs_product;
+
+-- ALTER TABLE bs_product MODIFY p_filename VARCHAR2(200);
+SELECT * from bs_product WHERE p_id='P1252';
+
 commit;
