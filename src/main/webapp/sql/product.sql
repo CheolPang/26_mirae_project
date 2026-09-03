@@ -1,13 +1,13 @@
 CREATE TABLE bs_product(
-p_id VARCHAR2(10) NOT NULL,
-p_name VARCHAR2(100),
+p_id VARCHAR2(500) NOT NULL,
+p_name VARCHAR2(500),
 p_unitPrice number,
 p_description VARCHAR2(500),
-p_category VARCHAR2(20),
-p_manufacturer VARCHAR2(20),
+p_category VARCHAR2(500),
+p_manufacturer VARCHAR2(500),
 p_unitsInStock number,
-p_condition VARCHAR2(20),
-p_fileName VARCHAR2(20),
+p_condition VARCHAR2(500),
+p_fileName VARCHAR2(500),
 p_quantity number default 0,
 PRIMARY KEY (p_id)
 );
