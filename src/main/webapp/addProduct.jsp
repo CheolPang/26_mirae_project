@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	// 관리자(admin) 계정만 접근 허용
+	String adminCheckId = (String) session.getAttribute("sessionId");
+	if (!"admin".equals(adminCheckId)) {
+		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
+		return;
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>

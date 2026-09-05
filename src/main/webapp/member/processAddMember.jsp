@@ -24,7 +24,7 @@
 <sql:setDataSource var="dataSource" url="jdbc:oracle:thin:@localhost:1521:xe" driver="oracle.jdbc.driver.OracleDriver" user="C##dbexam" password="m1234"/>
 
 <sql:update dataSource="${dataSource}" var="resultSet">
-	insert into bs_member values(?,?,?,?,?,?,?,?, sysdate, seq_num.nextval, sysdate, sysdate)
+	insert into bs_member values(?,?,?,?,?,?,?,?, sysdate, bs_seq_num.nextval, sysdate, sysdate)
 	<sql:param value="<%=id %>"/>
 	<sql:param value="<%=password %>"/>
 	<sql:param value="<%=name %>"/>

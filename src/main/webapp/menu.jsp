@@ -4,9 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String sessionId = (String) session.getAttribute("sessionId");
-	if (sessionId == null && request.getUserPrincipal() != null) {
-		sessionId = request.getUserPrincipal().getName();
-	}
 %>
 <head>
 	<meta charset="UTF-8">
@@ -21,7 +18,9 @@
 </head>
 <body>
 <!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+		<c:choose>
+			<c:when test="${sessionId eq 'admin'}">
+					<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
 				<a href="#" class="navbar-brand">관리자 모드<span>.</span></a>
@@ -40,6 +39,10 @@
 			</div>
 				
 		</nav>
+			</c:when>
+			<c:otherwise>
+			</c:otherwise>
+		</c:choose>
 		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
@@ -90,6 +93,7 @@
 							</a><!-- products list -->
 						</li>
 						<li><a class="nav-link" href="<c:url value="/products.jsp"/>">상품 목록</a><!-- products list --></li>
+						<li><a class="nav-link" href="<c:url value='/BoardListAction.do?pageNum=1'/>">게시판</a></li><!-- contact -->
 						<li><a class="nav-link" href="<c:url value="/about.html"/>">문의</a></li><!-- contact -->
 
 						        <li class="nav-item dropdown">

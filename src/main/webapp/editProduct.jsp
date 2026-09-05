@@ -5,6 +5,14 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="dto.Product" %>
 <jsp:useBean id="productDAO" class="dao.ProductRepository" scope="session"/>
+<%
+	// 관리자(admin) 계정만 접근 허용
+	String adminCheckId = (String) session.getAttribute("sessionId");
+	if (!"admin".equals(adminCheckId)) {
+		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
+		return;
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
