@@ -22,7 +22,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col p-5">
-					<form action="j_security_check" method="post">
+					<form action="./processLoginMember.jsp" method="post">
 						<div class="error">
 							<%
 								String error = request.getParameter("error");
@@ -34,12 +34,12 @@
 
 						<div class="mb-3">
 						    <label for="inputId" class="form-label">아이디</label>
-						    <input type="text" class="form-control" id="inputId" aria-describedby="emailHelp" name="j_username">
+						    <input type="text" class="form-control" id="inputId" aria-describedby="emailHelp" name="id">
 					    	<div id="idHelp" class="form-text">아이디를 입력해주세요.</div>
 						</div>
 						<div class="mb-3">
 					    	<label for="inputPw" class="form-label">비밀번호</label>
-					    	<input type="password" class="form-control" id="inputPw" name="j_password">
+					    	<input type="password" class="form-control" id="inputPw" name="pw">
 					    	<div id="pwHelp" class="form-text">비밀번호를 입력해주세요.</div>
 					  	</div> 
 					  	<button type="submit" class="btn btn-primary">로그인</button>

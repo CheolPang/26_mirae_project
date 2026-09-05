@@ -78,6 +78,13 @@
 							</div>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
+									<label for="pw_confirm" class="text-black">비밀번호 확인 <span
+										class="text-danger">*</span></label> <input type="password"
+										class="form-control" id="pw_confirm" name="pw_confirm" placeholder="비밀번호를 다시 입력하세요." required>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-12 mb-3">
 									<label for="name" class="text-black">이름 <span
 										class="text-danger">*</span></label> <input type="text"
 										class="form-control" id="name" name="name" placeholder="이름을 입력하세요." required>
@@ -111,11 +118,11 @@
 							<div class="form-group mb-3">
 								<label for="gender" class="text-black">성별 <span
 									class="text-danger">*</span></label> <select id="gender"
-									class="form-control">
-									<option value="male">남성</option>
-									<option value="female">여성</option>
-									<option value="other">기타</option>
-									<option value="private">공개하지 않음</option>
+									name="gender" class="form-control">
+									<option value="남">남성</option>
+									<option value="여">여성</option>
+									<option value="기타">기타</option>
+									<option value="비공개">공개하지 않음</option>
 								</select>
 							</div>
 							

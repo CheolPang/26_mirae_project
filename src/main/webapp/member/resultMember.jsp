@@ -29,13 +29,16 @@
 			<%
 				String msg = request.getParameter("msg");
 				if(msg != null) {
-					if (msg.equals("")) {
-						out.print("회원정보가 존재하지 않습니다.");
+					if (msg.equals("0")) {
+						out.print("회원정보가 업데이트 되었습니다.");
 					} else if (msg.equals("1")) {
-						out.print("회원가입이 완료되었습니다. 다시 로그인해주세요.");
+						out.print("<h2>회원가입이 완료되었습니다. 다시 로그인해주세요.</h2>");
 					} else if (msg.equals("2")) {
 						String loginId = (String) session.getAttribute("sessionId");
-						out.print(loginId+"님 로그인되었습니다. 환영합니다.");
+						out.print("<h2>"+loginId+"님 로그인되었습니다. 환영합니다.</h2>");
+					} else if (msg.equals("3")) {
+						String loginId = (String) session.getAttribute("sessionId");
+						out.print("<h2>정상 탈퇴 처리되었습니다.</h2>");
 					}
 				} else {
 					out.print("회원정보가 존재하지 않습니다.");
