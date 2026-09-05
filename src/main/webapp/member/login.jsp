@@ -7,7 +7,7 @@
 <title>CPShop | Login</title>
 </head>
 <body>
-	<%@ include file="menu.jsp" %>
+	<%@ include file="../menu.jsp" %>
 		<div class="container-fluid">
 			<div class="row">
 				<div>
@@ -47,6 +47,6 @@
 				</div>
 			</div>
 		</div>
-	<%@ include file="footer.jsp" %>
+	<%@ include file="../footer.jsp" %>
 </body>
 </html>

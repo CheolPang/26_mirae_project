@@ -9,7 +9,7 @@
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>뉴스레터를 구독하세요</span></h3>
+							<h3 class="d-flex align-items-center"><span class="me-1"><img src="<%=request.getContextPath()%>/images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>뉴스레터를 구독하세요</span></h3>
 
 							<form action="#" class="row g-3">
 								<div class="col-auto">
@@ -77,8 +77,8 @@
 			</div>
 		</footer>
 		<!-- End Footer Section -->	
-	<script src="js/bootstrap.bundle.min.js"></script>
-	<script src="js/tiny-slider.js"></script>
-	<script src="js/custom.js"></script>
-	<script src="js/validation.js"></script>
-	<script src="js/basket.js"></script>
+	<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
+	<script src="<%=request.getContextPath()%>/js/tiny-slider.js"></script>
+	<script src="<%=request.getContextPath()%>/js/custom.js"></script>
+	<script src="<%=request.getContextPath()%>/js/validation.js"></script>
+	<script src="<%=request.getContextPath()%>/js/basket.js"></script>

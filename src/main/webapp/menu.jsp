@@ -1,15 +1,22 @@
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	String sessionId = (String) session.getAttribute("sessionId");
+	if (sessionId == null && request.getUserPrincipal() != null) {
+		sessionId = request.getUserPrincipal().getName();
+	}
+%>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="shortcut icon" href="favicon.png">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="<%=request.getContextPath()%>/favicon.png">
+	<link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-	<link href="css/tiny-slider.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
-	<link href="myStyle.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/css/tiny-slider.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/css/style.css" rel="stylesheet">
+	<link href="<%=request.getContextPath()%>/myStyle.css" rel="stylesheet">
 	<title>CPShop</title>
 </head>
 <body>
@@ -24,9 +31,9 @@
 
 				<div class="collapse navbar-collapse" id="navbarsFurniAdmin">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">					
-						<li><a class="nav-link" href="addProduct.jsp">상품 등록</a></li><!-- products register-->
-						<li><a class="nav-link" href="editProduct.jsp?edit=update">상품 수정</a></li><!-- products update-->
-						<li><a class="nav-link" href="editProduct.jsp?edit=delete">상품 삭제</a></li><!-- products delete-->
+						<li><a class="nav-link" href="<c:url value="/addProduct.jsp"/>">상품 등록</a></li><!-- products register-->
+						<li><a class="nav-link" href="<c:url value="/editProduct.jsp?edit=update"/>">상품 수정</a></li><!-- products update-->
+						<li><a class="nav-link" href="<c:url value="/editProduct.jsp?edit=delete"/>">상품 삭제</a></li><!-- products delete-->
 					</ul>
 				</div>
 
@@ -36,7 +43,7 @@
 		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
-				<a class="navbar-brand" href="welcome.jsp">CPShop<span>.</span></a>
+				<a class="navbar-brand" href="<c:url value="/welcome.jsp"/>">CPShop<span>.</span></a>
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -45,7 +52,7 @@
 				<div class="collapse navbar-collapse" id="navbarsFurni">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li class="nav-item time">
-							<a class="nav-link" href="welcome.jsp">
+							<a class="nav-link" href="<c:url value="/welcome.jsp"/>">
 								<small>
 									<% 
 									 	Date day = new java.util.Date();
@@ -82,8 +89,8 @@
 								</small>
 							</a><!-- products list -->
 						</li>
-						<li><a class="nav-link" href="products.jsp">상품 목록</a><!-- products list --></li>
-						<li><a class="nav-link" href="about.html">문의</a></li><!-- contact -->
+						<li><a class="nav-link" href="<c:url value="/products.jsp"/>">상품 목록</a><!-- products list --></li>
+						<li><a class="nav-link" href="<c:url value="/about.html"/>">문의</a></li><!-- contact -->
 
 						        <li class="nav-item dropdown">
 						          <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,18 +104,25 @@
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarMyPageDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#"><img src="images/user.svg"></a>
+						<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarMyPageDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#"><img src="<%=request.getContextPath()%>/images/user.svg"></a>
 							<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarMyPageDropdownLink">
-						            <li><a class="dropdown-item" href="login.jsp">회원 로그인</a></li>
-						            <li><a class="dropdown-item" href="logout.jsp">회원 로그아웃</a></li>
-						            <li><a class="dropdown-item" href="#">회원 가입</a></li>
-						            <li><a class="dropdown-item" href="#">회원 수정</a></li>
+									<c:choose>
+										<c:when test="${empty sessionId}">
+								            <li><a class="dropdown-item" href="<c:url value="/member/login.jsp"/>">회원 로그인</a></li>
+								            <li><a class="dropdown-item" href="<c:url value="/member/addMember.jsp"/>">회원 가입</a></li>
+								        </c:when>
+								        <c:otherwise>
+								            <li><a class="dropdown-item">[<%=sessionId %>님] 로그인 중</a></li>
+								            <li><a class="dropdown-item" href="<c:url value="/member/logout.jsp"/>">회원 로그아웃</a></li>
+								            <li><a class="dropdown-item" href="<c:url value="/member/updateMember.jsp"/>">회원 수정</a></li>
+							            </c:otherwise>   
+						            </c:choose>
 						            <li><hr class="dropdown-divider"></li>
 						            <li><a class="dropdown-item" href="#">주문 정보</a></li>
 						            <li><a class="dropdown-item" href="#">배송 정보</a></li>
 							</ul>
 						</li>
-						<li><a class="nav-link" href="cart.jsp"><img src="images/cart.svg"></a></li>
+						<li><a class="nav-link" href="<c:url value="/cart.jsp"/>"><img src="<%=request.getContextPath()%>/images/cart.svg"></a></li>
 					</ul>
 				</div>
 

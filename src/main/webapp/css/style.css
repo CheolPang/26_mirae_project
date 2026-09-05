@@ -719,3 +719,7 @@ textarea {
 	gap: 1rem;
 	padding-top: 1rem !important;
 }
+
+.signForm {
+	border-radius: 10px !important;
+}
