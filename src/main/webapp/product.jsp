@@ -50,6 +50,7 @@
 				<p><b class="cs-bold cs-small">분류 </b> <%=rs.getString("p_category") %></p>
 				<p><b class="cs-bold cs-small">재고 수 </b> <%=rs.getInt("p_unitsInStock") %></p>
 				<p><b class="cs-bold cs-small">상품 가격 </b> <%=rs.getInt("p_unitPrice") %></p>
+				<p><b class="cs-bold cs-small">상품 상태 </b> <%=rs.getString("p_condition") %></p>
 				<form action="addCart.jsp" name="addForm" method="post" class="d-flex flex-wrap gap-2">
 					<input type="hidden" name="id" value="<%=rs.getString("p_id")%>">
 					<button type="button" class="btn btn-primary btn-sm">상품 주문</button>
