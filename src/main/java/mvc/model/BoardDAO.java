@@ -51,12 +51,31 @@ public class BoardDAO {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				list.add(makeBoardDTO(rs));
+				BoardDTO board = new BoardDTO();
+				board.setNum(rs.getInt("num"));
+				board.setId(rs.getString("id"));
+				board.setName(rs.getString("name"));
+				board.setSubject(rs.getString("subject"));
+				board.setContent(rs.getString("content"));
+				board.setHit(rs.getInt("hit"));
+				board.setIp(rs.getString("ip"));
+				board.setRegist_day(rs.getString("regist_day"));
+				board.setUpdate_day(rs.getString("update_day"));
+				list.add(board);
 			}
 		} catch (Exception e) {
 			System.out.println("getBoardList() 에러 : " + e);
 		} finally {
-			close(rs, pstmt, conn);
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -94,7 +113,16 @@ public class BoardDAO {
 		} catch (Exception e) {
 			System.out.println("getListCount() 에러 : " + e);
 		} finally {
-			close(rs, pstmt, conn);
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return x; // 선택된 총 게시글의 갯수를 리턴
@@ -106,23 +134,35 @@ public class BoardDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
+		// 조건에 맞는 전체 글 수. 나중에 페이징을 구현할 때 이 값으로 마지막 페이지를 계산한다.
+		int total_record = getListCount(items, text);
+
 		String column = validColumn(items);
 		boolean search = (column != null && hasKeyword(text));
-
-		// 페이징은 아직 구현하지 않는다. page/limit 값은 받아만 두고 전체 목록을 반환한다.
+		
+		int start = (page - 1) * limit;
+		//=>예)페이징 넘버가 1일 떄 start는 0,5,10...
+		//페이징 넘버가 2일 떄 index는 5,10,15...
+		
+		int index = start  + 1;
+		//=>예)페이징 넘버가 1일 떄 start는 1,6,11... (인덱스는 1로 시작함)
+		//페이징 넘버가 2일 떄 index는 6,11,16... (인덱스는 6으로 시작함)
+		
+		
+		
 		String sql;
 		if (search) {
 			sql = "select * from bs_board where " + column + " like ? order by num desc";
 		} else {
 			sql = "select * from bs_board order by num desc";
 		}
-		System.out.println("getBoardList() sql: " + sql + " / text: " + text);
+		System.out.println("getBoardList() sql: " + sql + " / text: " + text + " / total_record: " + total_record);
 
 		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 
 		try {
 			conn = DBConnection.getConnection();
-			pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			if (search) {
 				pstmt.setString(1, "%" + text.trim() + "%");
@@ -130,43 +170,38 @@ public class BoardDAO {
 
 			rs = pstmt.executeQuery();
 
-			while (rs.next()) {
-				list.add(makeBoardDTO(rs));
+			while (rs.absolute(index)) {
+				BoardDTO board = new BoardDTO();
+				board.setNum(rs.getInt("num"));
+				board.setId(rs.getString("id"));
+				board.setName(rs.getString("name"));
+				board.setSubject(rs.getString("subject"));
+				board.setContent(rs.getString("content"));
+				board.setHit(rs.getInt("hit"));
+				board.setIp(rs.getString("ip"));
+				board.setRegist_day(rs.getString("regist_day"));
+				board.setUpdate_day(rs.getString("update_day"));
+				list.add(board);
+				
+				//페이징 로직 추가
+				if(index < (start + limit) && index <= total_record) index++;
+				else break;
 			}
 
 		} catch (Exception e) {
 			System.out.println("getBoardList() 에러 : " + e);
 		} finally {
-			close(rs, pstmt, conn);
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list; // 저장한 게시글의 목록을 리턴
-	}
-
-	// ResultSet 한 행을 BoardDTO로 옮겨 담는다.
-	private BoardDTO makeBoardDTO(ResultSet rs) throws Exception {
-		BoardDTO board = new BoardDTO();
-		board.setNum(rs.getInt("num"));
-		board.setId(rs.getString("id"));
-		board.setName(rs.getString("name"));
-		board.setSubject(rs.getString("subject"));
-		board.setContent(rs.getString("content"));
-		board.setHit(rs.getInt("hit"));
-		board.setIp(rs.getString("ip"));
-		board.setRegist_day(rs.getString("regist_day"));
-		board.setUpdate_day(rs.getString("update_day"));
-		return board;
-	}
-
-	private void close(ResultSet rs, PreparedStatement pstmt, Connection conn) {
-		try {
-			if (rs != null)
-				rs.close();
-			if (pstmt != null)
-				pstmt.close();
-			if (conn != null)
-				conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

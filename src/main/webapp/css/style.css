@@ -157,6 +157,13 @@ a {
       @media (min-width: 1200px) {
         .hero .hero-img-wrap:after {
           top: -40px; } }
+          
+          
+.select {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 .btn {
   font-weight: 600;

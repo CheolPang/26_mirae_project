@@ -45,8 +45,8 @@
 						<div class="pageNum text-end">
 							<select name="items">
 								<option value="subject" ${param.items eq 'subject' ? 'selected' : ''}>제목에서</option>
-								<option value="content" ${param.items eq 'content' ? 'selected' : ''}>본문에서</option>
-								<option value="name" ${param.items eq 'name' ? 'selected' : ''}>글쓴이에서</option>
+								<option value="content" ${param.items eq 'subject' ? 'selected' : ''}>본문에서</option>
+								<option value="name" ${param.items eq 'subject' ? 'selected' : ''}>글쓴이에서</option>
 							</select> 
 							<input type="text" name="text" value="<c:out value='${param.text}'/>" /> 
 							<input type="submit" value="검색" class="btn btn-sm btn-primary ms-1" />

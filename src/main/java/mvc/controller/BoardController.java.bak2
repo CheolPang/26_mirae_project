@@ -47,8 +47,6 @@ public class BoardController extends HttpServlet {
 	public void requestBoardList(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 
-		int limit = LISTCOUNT; // 한 페이지에 보여 줄 게시글 수
-
 		int pageNum = 1;
 		if (request.getParameter("pageNum") != null) {
 			pageNum = Integer.parseInt(request.getParameter("pageNum"));
@@ -66,7 +64,7 @@ public class BoardController extends HttpServlet {
 		int total_record = dao.getListCount(items, text); 
 //		int total_page = 1; 
 
-		List<BoardDTO> boardlist = dao.getBoardList(pageNum, limit, items, text);
+		List<BoardDTO> boardlist = dao.getBoardList(pageNum, LISTCOUNT, items, text);
 
 		request.setAttribute("boardlist", boardlist);
 		request.setAttribute("pageNum", pageNum);
@@ -74,7 +72,7 @@ public class BoardController extends HttpServlet {
 //		request.setAttribute("total_page", total_page);
 		
 		int total_page; //게시판 총 페이지수
-		if(total_record % limit == 0) {
+		if(total_page % limit == 0) {
 			total_page = total_record/limit;
 		} else {
 			total_page = total_record/limit;

@@ -44,13 +44,13 @@
 						</div>
 						<div class="pageNum text-end">
 							<select name="items">
-								<option value="subject" ${param.items eq 'subject' ? 'selected' : ''}>제목에서</option>
-								<option value="content" ${param.items eq 'content' ? 'selected' : ''}>본문에서</option>
-								<option value="name" ${param.items eq 'name' ? 'selected' : ''}>글쓴이에서</option>
+								<option value="subject">제목에서</option>
+								<option value="content">본문에서</option>
+								<option value="name">글쓴이에서</option>
 							</select> 
-							<input type="text" name="text" value="<c:out value='${param.text}'/>" /> 
+							<input type="text" name="text" /> 
 							<input type="submit" value="검색" class="btn btn-sm btn-primary ms-1" />
-							<a href="<c:url value='/BoardListAction.do?pageNum=1'/>" class="btn btn-sm btn-danger">검색 초기화</a>
+							<a href="" class="btn btn-sm btn-danger">검색 초기화</a>
 						</div>
 					</div>
 
@@ -83,29 +83,16 @@
 				</div>
 
 			</div>
-			<div class="select">
-				<c:set value="<%=pageNum%>" var="pageNum" />
-				<c:forEach var="i" begin="1" end="<%=total_page%>">
-
-					<c:url value="./BoardListAction.do" var="pageUrl">
-						<c:param name="pageNum" value="${i}" />
-						<c:if test="${not empty param.text}">
-							<c:param name="items" value="${param.items}" />
-							<c:param name="text" value="${param.text}" />
-						</c:if>
-					</c:url>
-
-					<a href="${pageUrl}">
-						<c:choose>
-							<c:when test="${pageNum==i}">
-								<b>[${i}]</b>
-							</c:when>
-							<c:otherwise>[${i}]</c:otherwise>
-						</c:choose>
-					</a>
-				</c:forEach>
-			</div>
-
+			
+			<c:set value="<%=pageNum %>" var="pageNum"/>
+			<c:foreach var="i" begin="1" end="<%=total_page %>">
+				<a href='<c:url value="./BoardListAction.do?pageNum=${i}"/>'>
+					<c:choose>
+						<c:when test="${pageNum==i}"><b>[${i}]</b></c:when>
+						<c:otherwise>[${i}]</c:otherwise>
+					</c:choose>
+				</a>
+			</c:foreach>
 		</form>
 	</div>
 
