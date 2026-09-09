@@ -1,22 +1,15 @@
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="dto.Product"%>
+<%@page import="dao.ProductRepository"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	// 관리자(admin) 계정만 접근 허용
-	String adminCheckId = (String) session.getAttribute("sessionId");
-	if (!"admin".equals(adminCheckId)) {
-		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
-		return;
-	}
-%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CPShop | processUpdateProduct</title>
+<title>CPShop | processAddProduct</title>
 </head>
 <body>
 	<%@ include file="dbconn.jsp" %>
@@ -57,55 +50,29 @@
 		String frame = (String) files.nextElement();
 		String fileName = multi.getFilesystemName(frame);
 		
+//		ProductRepository dao = ProductRepository.getInstance();
 		
 		Product newProduct = new Product();
-		//String sql = "INSERT INTO bs_product VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
-		String sql = "SELECT * FROM bs_product where p_id=?";
+		String sql = "INSERT INTO bs_product VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+		
 		pstmt = conn.prepareStatement(sql);
 		
 		pstmt.setString(1, productId);
-		rs = pstmt.executeQuery();
-
-		if(rs.next()) {
-			if (fileName != null) {
-				sql = "UPDATE bs_product SET p_name=?, p_unitPrice=?, p_description=?, p_category=?, p_manufacturer=?, p_unitsInStock=?, p_condition=?, p_fileName=?, p_quantity=10 WHERE p_id=?";
-				pstmt = conn.prepareStatement(sql);				
-				pstmt.setString(1, productName);
-				pstmt.setInt(2, price);
-				pstmt.setString(3, description);
-				pstmt.setString(4, category);
-				pstmt.setString(5, manufacturer);
-				pstmt.setLong(6, stock);
-				pstmt.setString(7, condition);
-				pstmt.setString(8, fileName);
-				pstmt.setString(9, productId);
-				
-				pstmt.executeUpdate();
-
-			} else {
-				sql = "UPDATE bs_product SET p_name=?, p_unitPrice=?, p_description=?, p_category=?, p_manufacturer=?, p_unitsInStock=?, p_condition=?, p_quantity=10 WHERE p_id=?";
-				pstmt = conn.prepareStatement(sql);				
-				pstmt.setString(1, productName);
-				pstmt.setInt(2, price);
-				pstmt.setString(3, description);
-				pstmt.setString(4, category);
-				pstmt.setString(5, manufacturer);
-				pstmt.setLong(6, stock);
-				pstmt.setString(7, condition);
-				pstmt.setString(8, productId);
-
-				pstmt.executeUpdate();
-
-			}
-		}
+		pstmt.setString(2, productName);
+		pstmt.setInt(3, price);
+		pstmt.setString(4, description);
+		pstmt.setString(5, category);
+		pstmt.setString(6, manufacturer);
+		pstmt.setLong(7, stock);
+		pstmt.setString(8, condition);
+		pstmt.setString(9, fileName);
 		
-		
-		if(rs != null) rs.close();
+		pstmt.executeUpdate();
 		if(pstmt != null) pstmt.close();
 		if(conn != null) conn.close();
 		
 //		dao.addProduct(newProduct);
-		response.sendRedirect("editProduct.jsp?edit=update");
+		response.sendRedirect("products.jsp");
 	%>
 </body>
 </html>

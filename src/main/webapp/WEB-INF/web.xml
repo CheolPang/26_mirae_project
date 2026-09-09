@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app>
-	<security-role>
-		<description></description>
-		<role-name>admin</role-name>
-	</security-role>
-	<security-constraint>
-		<display-name>market security</display-name>
-		<web-resource-collection>
-			<web-resource-name>market</web-resource-name>
-			<url-pattern>/addProduct.jsp</url-pattern>
-			<url-pattern>/editProduct.jsp</url-pattern>
-		</web-resource-collection>
-
-		<auth-constraint>
-			<description>권한 사용자명</description>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-
-
-	<login-config>
-		<auth-method>FORM</auth-method>
-		<form-login-config>
-			<form-login-page>/member/login.jsp</form-login-page>
-			<form-error-page>/member/login_failed.jsp</form-error-page>
-		</form-login-config>
-	</login-config>
+	<!--
+		컨테이너 인증(FORM + security-constraint)은 제거함.
+		이 프로젝트의 로그인은 member/processLoginMember.jsp 에서
+		session의 "sessionId" 속성으로 처리하는 애플리케이션 레벨 인증이므로,
+		톰캣 컨테이너는 로그인 상태를 알 수 없어 관리자 페이지 접근 시
+		무조건 로그인 폼으로 되돌려 보내는 문제가 있었다.
+		관리자 권한 체크는 각 JSP 상단의 sessionId 검사로 수행한다.
+	-->
 
 	<error-page>
 	    <error-code>404</error-code>

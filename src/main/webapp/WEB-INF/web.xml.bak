@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<security-role>
+		<description></description>
+		<role-name>admin</role-name>
+	</security-role>
+	<security-constraint>
+		<display-name>market security</display-name>
+		<web-resource-collection>
+			<web-resource-name>market</web-resource-name>
+			<url-pattern>/addProduct.jsp</url-pattern>
+			<url-pattern>/editProduct.jsp</url-pattern>
+		</web-resource-collection>
+
+		<auth-constraint>
+			<description>권한 사용자명</description>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/member/login.jsp</form-login-page>
+			<form-error-page>/member/login_failed.jsp</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<error-page>
+	    <error-code>404</error-code>
+	    <location>/exceptionNoPage.jsp</location>
+	</error-page>
+	
+	<servlet> 
+		<servlet-name>BoardController</servlet-name>
+		<servlet-class>mvc.controller.BoardController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BoardController</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+</web-app>
