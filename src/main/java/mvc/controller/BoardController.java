@@ -32,7 +32,9 @@ public class BoardController extends HttpServlet {
 		String contextPath = request.getContextPath();
 		System.out.println("contextPath: "+contextPath);
 		
-		String command = RequestURI.substring(contextPath.length());
+		// getRequestURI()는 forward("./BoardListAction.do") 시 "/./BoardListAction.do"처럼
+		// 정리되지 않은 경로가 들어와 비교가 실패하므로, 항상 "/xxx.do"로 정리되는 getServletPath()를 쓴다.
+		String command = request.getServletPath();
 		System.out.println("command: "+command);
 		
 		if(command.equals("/BoardListAction.do")) {

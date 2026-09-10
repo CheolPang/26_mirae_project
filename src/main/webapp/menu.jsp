@@ -1,4 +1,4 @@
-<%@page import="java.util.Date"%>
+<%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -58,11 +58,11 @@
 							<a class="nav-link" href="<c:url value="/welcome.jsp"/>">
 								<small>
 									<% 
-									 	Date day = new java.util.Date();
+										LocalDateTime day = LocalDateTime.now();
 										String am_pm;
-										int hour = day.getHours();
-										int minute = day.getMinutes();
-										int second = day.getSeconds();
+										int hour = day.getHour();
+										int minute = day.getMinute();
+										int second = day.getSecond();
 										
 										String rHour = String.valueOf(hour);
 									    String rMin = String.valueOf(minute);

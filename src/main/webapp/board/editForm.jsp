@@ -78,8 +78,8 @@
 						</div>
 						<div class="mb-3">
 						    <input type="submit" class="btn btn-primary" value="수정" />
-						    <input type="reset" class="btn btn-danger" value="취소" />
-						    <input type="button" class="btn btn-dark" value="이전" onclick="history.back()"/>
+						    <input type="reset" class="btn btn-danger" value="초기화" />
+						    <input type="button" class="text-end btn btn-dark" value="이전" onclick="history.back()"/>
 						</div>
 					</form>
 				</div>

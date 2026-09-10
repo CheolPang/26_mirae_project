@@ -74,6 +74,7 @@
 							<input type="button" class="btn btn-danger" value="삭제" onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='./board/editForm.jsp?edit=delete&num=<%=num %>&pageNum=<%=now %>'" />
 						</div>
 					</c:if>
+					
 				</form>
 			</div>
 			</div>
