@@ -70,7 +70,7 @@
 						%>
 						<tr>
 							<td><%=boardDTO.getNum()%></td>
-							<td><%=boardDTO.getSubject()%></td>
+							<td><a href="./BoardViewAction.do?num=<%=boardDTO.getNum() %>&pageNum=<%=pageNum %>"><%=boardDTO.getSubject()%></a></td>
 							<td><%=boardDTO.getRegist_day()%></td>
 							<td><%=boardDTO.getUpdate_day()%></td>
 							<td><%=boardDTO.getHit()%></td>

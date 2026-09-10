@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import mvc.database.DBConnection;
 
 public class BoardDAO {
@@ -204,4 +206,197 @@ public class BoardDAO {
 		}
 		return list; // 저장한 게시글의 목록을 리턴
 	}
+	
+	public String getLoginNameById(String id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String name = null;
+		String sql = "select * from bs_member where id=?";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				name = rs.getString("name");
+			}
+			
+		} catch (Exception e) {
+			System.out.println("getLoginById() 에러 : " + e);
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return name;
+	}
+	
+	public void insertBoard(BoardDTO board) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			String sql = "insert into bs_board values (bs_num.nextval, ?,?,?,?,?,?,sysdate,sysdate)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, board.getId());
+			pstmt.setString(2, board.getName());
+			pstmt.setString(3, board.getSubject());
+			pstmt.setString(4, board.getContent());
+			pstmt.setInt(5, board.getHit());
+			pstmt.setString(6, board.getIp());
+
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("insertBoard() 에러 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public BoardDTO getBoardByNum(int num, int page) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		BoardDTO board = null;
+		
+		//updateHit(num);
+		String sql = "select * from bs_board where num=?";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				board = new BoardDTO();
+				board.setNum(rs.getInt("num"));
+				board.setId(rs.getString("id"));
+				board.setName(rs.getString("name"));
+				board.setSubject(rs.getString("subject"));
+				board.setContent(rs.getString("content"));
+				board.setHit(rs.getInt("hit"));
+				board.setIp(rs.getString("ip"));
+				board.setRegist_day(rs.getString("regist_day"));
+				board.setUpdate_day(rs.getString("update_day"));
+			}
+			
+		} catch (Exception e) {
+			System.out.println("getBoardByNum() 에러 : " + e);
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return board;
+	}
+	
+	public void updateBoard(BoardDTO board) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBConnection.getConnection();
+			String sql = "update bs_board set subject=?, content=?, update_day=sysdate where num=?";
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, board.getSubject());
+			pstmt.setString(2, board.getContent());
+			pstmt.setInt(3, board.getNum());
+
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("updateBoard() 에러 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteBoard(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBConnection.getConnection();
+			String sql = "delete from bs_board where num=?";
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, num);
+
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("deleteBoard() 에러 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void updateHit(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DBConnection.getConnection();
+			String sql = "update bs_board set hit = hit+1 where num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("updateHit() 에러 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }
+
+
+

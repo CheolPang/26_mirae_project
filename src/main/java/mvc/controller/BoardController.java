@@ -41,6 +41,22 @@ public class BoardController extends HttpServlet {
 			//어디 페이지로 이동하겠다.
 			RequestDispatcher rd = request.getRequestDispatcher("./board/list.jsp");
 			rd.forward(request, response);
+		} else if (command.equals("/BoardWriteForm.do")) {
+			requestLoginName(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./board/WriteForm.jsp");
+			rd.forward(request, response);
+		} else if (command.equals("/BoardWriteAction.do")) {
+			requestBoardWrite(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./BoardListAction.do?pageNum=1");
+			rd.forward(request, response);
+		} else if (command.equals("/BoardViewAction.do")) {
+			requestBoardView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./board/view.jsp");
+			rd.forward(request, response);
+		} else if (command.equals("/BoardUpdateAction.do")) {
+			requestBoardUpdate(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./board/view.jsp");
+			rd.forward(request, response);
 		}
 	}
 	
@@ -83,5 +99,59 @@ public class BoardController extends HttpServlet {
 		
 		request.setAttribute("total_page", total_page);
 		request.setAttribute("boardlist", boardlist);
+	}
+	
+	public void requestLoginName(HttpServletRequest request) {
+		String id = request.getParameter("id");
+		BoardDAO dao  = BoardDAO.getInstance();
+		String name = dao.getLoginNameById(id);
+		request.setAttribute("name", name);
+	}
+	
+	public void requestBoardWrite(HttpServletRequest request) {
+		BoardDAO dao = BoardDAO.getInstance();
+		
+		BoardDTO board = new BoardDTO();
+		board.setId(request.getParameter("id"));
+		board.setName(request.getParameter("name"));
+		board.setSubject(request.getParameter("subject"));
+		board.setContent(request.getParameter("content"));
+		
+		board.setHit(0);
+		board.setIp(request.getRemoteAddr());
+
+		dao.insertBoard(board);
+	}
+
+	public void requestBoardUpdate(HttpServletRequest request) {
+		BoardDAO dao = BoardDAO.getInstance();
+		int num = Integer.parseInt(request.getParameter("num"));
+		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+
+		BoardDTO board = new BoardDTO();
+		board.setNum(num);
+		board.setSubject(request.getParameter("subject"));
+		board.setContent(request.getParameter("content"));
+
+		dao.updateBoard(board);
+
+		request.setAttribute("num", num);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("board", dao.getBoardByNum(num, pageNum));
+	}
+	
+	public void requestBoardView(HttpServletRequest request) {
+		BoardDAO dao = BoardDAO.getInstance();
+		int num = Integer.parseInt(request.getParameter("num"));
+		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		
+		dao.updateHit(num);
+
+		BoardDTO board = new BoardDTO();
+		board = dao.getBoardByNum(num, pageNum);
+		
+		request.setAttribute("num", num);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("board", board);
 	}
 }
