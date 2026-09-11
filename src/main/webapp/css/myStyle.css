@@ -1,0 +1,392 @@
+@charset "UTF-8";
+
+* {
+	text-decoration: none !important;
+}
+
+#sangBox, #coll {
+	background-color: white;
+	border-radius: 20px;
+	margin-right: 20px;
+	margin-left: 20px;
+	padding: 5%;
+}
+
+#titleLine {
+	padding-top: 3% !important;
+	padding-bottom: 1% !important;
+}
+
+/* ---------------------------------------------------------------
+   Bootstrap 버튼 variant 복구
+   style.css:161 의 `.btn { background:#2f2f2f }` 이 명시도 동점(0,1,0)에
+   나중 선언이라 부트스트랩의 .btn-danger 등을 덮어씀.
+   style.css 가 재정의한 것은 primary / secondary / white-outline 뿐이므로
+   빠진 variant 를 .btn.xxx (0,2,0) 로 여기서 되살린다.
+   (myStyle.css 는 menu.jsp 에서 style.css 다음에 로드됨)
+   --------------------------------------------------------------- */
+.btn.btn-danger {
+	background: #dc3545;
+	border-color: #dc3545;
+	color: #ffffff;
+}
+.btn.btn-danger:hover {
+	background: #bb2d3b;
+	border-color: #b02a37;
+	color: #ffffff;
+}
+
+/* style.css:683 의 `.site-blocks-table .btn { background:none !important }` 가
+   표 안의 삭제 버튼 배경까지 지워버리므로 여기서만 다시 칠한다. */
+.site-blocks-table .btn.btn-danger {
+	background: #dc3545 !important;
+	border: 1px solid #dc3545;
+	color: #ffffff;
+}
+.site-blocks-table .btn.btn-danger:hover {
+	background: #bb2d3b !important;
+	border-color: #b02a37;
+	color: #ffffff;
+}
+
+/* ---------------------------------------------------------------
+   표 공통 : 카트/주문확인/게시판 모두 .site-blocks-table > table.table 구조
+   --------------------------------------------------------------- */
+/* 데이터가 없을 때 안내 행 */
+.site-blocks-table td.table-empty {
+	padding: 60px 20px;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+/* 게시판 목록 : 카트 표와 같은 스타일에 게시판에 필요한 부분만 조정 */
+.site-blocks-table td.board-subject {
+	text-align: left;
+}
+.site-blocks-table .board-subject a:hover {
+	color: #3b5d50 !important;
+}
+.site-blocks-table .board-date {
+	white-space: nowrap;
+}
+
+/* 게시판 하단 : 페이지 번호는 가운데, 글쓰기 버튼은 오른쪽 끝 */
+.board-footer {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	gap: 10px;
+}
+.board-footer nav {
+	grid-column: 2;
+}
+.board-footer .board-write-btn {
+	grid-column: 3;
+	justify-self: end;
+}
+
+/* Bootstrap 페이지 번호 색을 사이트 기본 색(#3b5d50)으로 (Bootstrap 5.1 은 CSS 변수가 없어 직접 지정) */
+.pagination .page-link {
+	color: #3b5d50;
+}
+.pagination .page-link:hover {
+	color: #314d43;
+	background-color: #eff2f1;
+}
+.pagination .page-link:focus {
+	box-shadow: 0 0 0 0.25rem rgba(59, 93, 80, 0.25);
+}
+.pagination .page-item.active .page-link {
+	color: #ffffff;
+	background-color: #3b5d50;
+	border-color: #3b5d50;
+}
+
+/* 상품 수정 폼의 현재 이미지 미리보기 */
+.product-preview {
+	max-height: 200px;
+}
+
+/* 게시판 상단 바 : 전체 건수(왼쪽) + 검색(오른쪽)을 한 줄에 */
+.boardBar {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+/* ---------------------------------------------------------------
+   상품 목록 / 상세 / 관리 (products.jsp, product.jsp, editProduct.jsp, updateProduct.jsp)
+   --------------------------------------------------------------- */
+.shop-section {
+	padding-block: 50px 100px;
+}
+.shop-count {
+	color: #2f2f2f;
+	margin-bottom: 20px;
+}
+.shop-count strong {
+	color: #3b5d50;
+}
+.shop-empty {
+	text-align: center;
+	padding-block: 80px;
+	color: #8a8a8a;
+}
+
+/* 목록 카드 그리드 : 4열 → 3열(태블릿) → 2열(모바일) */
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 40px 20px;
+}
+@media (max-width: 991.98px) {
+	.product-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+@media (max-width: 767.98px) {
+	.product-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 30px 12px;
+	}
+}
+
+.product-card {
+	display: block;
+	color: inherit;
+}
+.product-card:hover {
+	color: inherit;
+}
+.product-card-thumb {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: 10px;
+	background: #f5f5f5;
+}
+.product-card-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .3s ease;
+}
+.product-soldout {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.45);
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: 700;
+}
+.product-card-body {
+	padding-top: 12px;
+}
+.product-brand {
+	font-size: 12px;
+	line-height: 1.4;
+	color: #8a8a8a;
+	margin-bottom: 4px;
+}
+.product-card-name {
+	font-size: 15px;
+	line-height: 1.45;
+	color: #2f2f2f;
+	margin-bottom: 6px;
+	/* 상품명은 두 줄까지만 */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.product-card-price {
+	font-size: 17px;
+	font-weight: 700;
+	color: #2f2f2f;
+}
+.product-card-admin {
+	margin-top: 12px;
+}
+
+/* 상세 : 경로 표시 */
+.shop-breadcrumb {
+	padding-block: 24px 16px;
+	font-size: 13px;
+	color: #8a8a8a;
+}
+.shop-breadcrumb a {
+	color: #8a8a8a;
+}
+.shop-breadcrumb a:hover {
+	color: #3b5d50;
+}
+.shop-breadcrumb .sep {
+	margin: 0 6px;
+}
+
+/* 상세 : 왼쪽 이미지 + 오른쪽 구매 박스 */
+.product-detail {
+	padding-bottom: 60px;
+}
+.product-detail-image {
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+	border-radius: 10px;
+	background: #f5f5f5;
+}
+.product-detail-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.product-detail-name {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: #2f2f2f;
+	margin-bottom: 12px;
+}
+.product-detail-price {
+	font-size: 30px;
+	font-weight: 700;
+	color: #2f2f2f;
+	margin-bottom: 0;
+}
+.product-detail-price .won {
+	font-size: 20px;
+	font-weight: 600;
+	margin-left: 2px;
+}
+.product-info-table {
+	width: 100%;
+	margin-top: 24px;
+	border-top: 1px solid #e5e5e5;
+}
+.product-info-table th,
+.product-info-table td {
+	padding: 12px 0;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 14px;
+	vertical-align: top;
+}
+.product-info-table th {
+	width: 90px;
+	font-weight: 400;
+	color: #8a8a8a;
+}
+.product-info-table td {
+	color: #2f2f2f;
+}
+
+/* 상세 : 수량 선택 */
+.product-order-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 24px;
+	padding: 16px;
+	border-radius: 8px;
+	background: #f7f8f8;
+	color: #2f2f2f;
+}
+.qty-stepper {
+	display: inline-flex;
+	align-items: center;
+	overflow: hidden;
+	border: 1px solid #dcdcdc;
+	border-radius: 6px;
+	background: #ffffff;
+}
+.qty-stepper button {
+	width: 36px;
+	height: 36px;
+	border: 0;
+	background: #ffffff;
+	color: #2f2f2f;
+	font-size: 18px;
+	line-height: 1;
+}
+.qty-stepper button:disabled {
+	color: #cccccc;
+}
+.qty-stepper input {
+	width: 48px;
+	height: 36px;
+	border: 0;
+	border-left: 1px solid #dcdcdc;
+	border-right: 1px solid #dcdcdc;
+	text-align: center;
+	font-size: 14px;
+	-moz-appearance: textfield;
+}
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* 상세 : 총 금액 + 버튼
+   (.product-total 은 cart.jsp / orderConfirm.jsp 표 머리글이 이미 쓰는 이름이라 product-sum 으로 둔다) */
+.product-sum {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-top: 20px;
+	color: #2f2f2f;
+}
+.product-sum-price {
+	font-size: 22px;
+	font-weight: 700;
+	color: #3b5d50;
+}
+.product-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 16px;
+}
+.product-actions .btn {
+	flex: 1;
+}
+.btn.btn-outline-shop {
+	background: #ffffff;
+	border: 1px solid #3b5d50;
+	color: #3b5d50;
+}
+.btn.btn-outline-shop:hover {
+	background: #eff2f1;
+	border-color: #314d43;
+	color: #314d43;
+}
+
+/* 상세 : 상품정보 */
+.product-detail-section {
+	padding-block: 40px 80px;
+	border-top: 1px solid #e5e5e5;
+}
+.product-detail-section h2 {
+	font-size: 20px;
+	font-weight: 600;
+	color: #2f2f2f;
+	margin-bottom: 20px;
+}
+.product-spec-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.product-spec-list li {
+	padding: 10px 0;
+	border-bottom: 1px solid #f0f0f0;
+	color: #2f2f2f;
+}
+
+.product-card:hover {
+	background-color: rgb(196, 196, 196) !important;
+	padding: 1rem;
+	border-radius: 10px;
+}

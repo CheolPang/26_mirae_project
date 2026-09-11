@@ -64,17 +64,9 @@
 										href="./removeCart.jsp?id=<%=product.getProductId() %>"
 										class="btn btn-danger">삭제</a></td>
 								</tr>
-
-								<%
-                        	}
-                      		if (cartlist.isEmpty()) {
-                        %>
-								<tr>
-									<td colspan="5" class="table-empty">장바구니가 비어 있습니다.</td>
-								</tr>
-								<%
+						<%
                       		}
-                        %>
+						%>
 								<tr>
 									<td></td>
 									<td></td>

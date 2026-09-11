@@ -49,16 +49,18 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/BoardWriteAction.do")) {
 			requestBoardWrite(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./BoardListAction.do?pageNum=1");
-			rd.forward(request, response);
+			// forward 하면 주소창이 BoardWriteAction.do 로 남아 새로고침 시 글이 또 등록되므로
+			// 목록 주소로 redirect 한다 (Post/Redirect/Get)
+			response.sendRedirect(contextPath + "/BoardListAction.do?pageNum=1");
 		} else if (command.equals("/BoardViewAction.do")) {
 			requestBoardView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./board/view.jsp");
 			rd.forward(request, response);
 		} else if (command.equals("/BoardUpdateAction.do")) {
 			requestBoardUpdate(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./board/view.jsp");
-			rd.forward(request, response);
+			// 글 등록과 같은 이유로 상세 보기 주소로 redirect 한다 (새로고침 시 재전송 방지)
+			response.sendRedirect(contextPath + "/BoardViewAction.do?num=" + request.getAttribute("num")
+					+ "&pageNum=" + request.getAttribute("pageNum"));
 		}
 	}
 	
@@ -139,7 +141,6 @@ public class BoardController extends HttpServlet {
 
 		request.setAttribute("num", num);
 		request.setAttribute("pageNum", pageNum);
-		request.setAttribute("board", dao.getBoardByNum(num, pageNum));
 	}
 	
 	public void requestBoardView(HttpServletRequest request) {
