@@ -23,8 +23,6 @@ public class BoardDAO {
 		return instance;
 	}
 
-	// 검색 대상 컬럼명은 SQL에 직접 붙여야 하므로(? 바인딩 불가)
-	// 허용된 컬럼인지 반드시 확인한다. 허용되지 않으면 null(=검색 안 함)로 처리한다.
 	private String validColumn(String items) {
 		if ("subject".equals(items) || "content".equals(items) || "name".equals(items)) {
 			return items;
@@ -32,7 +30,6 @@ public class BoardDAO {
 		return null;
 	}
 
-	// 검색어가 비어 있으면 검색하지 않는 것으로 본다.
 	private boolean hasKeyword(String text) {
 		return text != null && !text.trim().isEmpty();
 	}
@@ -95,7 +92,6 @@ public class BoardDAO {
 
 		String sql;
 		if (search) {
-			// 검색어는 ?로 바인딩하여 SQL 인젝션을 막는다.
 			sql = "select count(*) from bs_board where " + column + " like ?";
 		} else {
 			sql = "select count(*) from bs_board";
@@ -136,7 +132,6 @@ public class BoardDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		// 조건에 맞는 전체 글 수. 나중에 페이징을 구현할 때 이 값으로 마지막 페이지를 계산한다.
 		int total_record = getListCount(items, text);
 
 		String column = validColumn(items);
@@ -242,8 +237,6 @@ public class BoardDAO {
 		return name;
 	}
 	
-	// 저장에 성공하면 true. 길이 초과(ORA-12899) 등으로 실패하면 false 를 돌려줘서
-	// 컨트롤러가 글이 조용히 사라지지 않게 처리할 수 있게 한다.
 	public boolean insertBoard(BoardDTO board) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -322,7 +315,6 @@ public class BoardDAO {
 		return board;
 	}
 	
-	// insertBoard 와 같이 성공 여부를 돌려준다.
 	public boolean updateBoard(BoardDTO board) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

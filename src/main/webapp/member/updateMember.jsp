@@ -42,7 +42,6 @@
 			alert("${msgNameRequired}")
 			return false;
 		}
-		// bs_member 칼럼 크기(바이트)를 넘으면 수정이 실패하므로 미리 막는다
 		const f = document.newMember;
 		if (!checkBytes(f.pw, 20, "${lblPw}") || !checkBytes(f.name, 30, "${lblName}")
 				|| !checkBytes(f.email, 30, "${lblEmail}") || !checkBytes(f.contact, 30, "${lblContact}")

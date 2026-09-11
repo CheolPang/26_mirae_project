@@ -5,7 +5,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	// 관리자(admin) 계정만 접근 허용
 	String adminCheckId = (String) session.getAttribute("sessionId");
 	if (!"admin".equals(adminCheckId)) {
 		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
@@ -24,8 +23,6 @@
 		request.setCharacterEncoding("UTF-8");
 	
 		String filename = "";
-//		String realFolder = "C:/Users/Administrator/eclipse-workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp2/wtpwebapps/byeongsu_freshman/upload"; //이미지가 저장될 경로
-		// 이미지 저장 위치 : processAddProduct.jsp 설명 참고 (Serve modules without publishing)
 		String realFolder = application.getRealPath("/upload");
 		String encType = "UTF-8";
 		int maxSize = 5*1024*1024;
@@ -33,8 +30,6 @@
 		try {
 			multi = new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy());
 		} catch (java.io.IOException e) {
-			// 5MB 초과 등 업로드 실패 : 500 에러 대신 수정 폼으로 돌려보낸다
-			// (본문을 못 읽었으므로 상품 코드는 form action 주소의 ?id= 에서 꺼낸다)
 			System.out.println("processUpdateProduct 업로드 실패 : " + e);
 		}
 		if (multi == null) {
@@ -72,9 +67,8 @@
 		
 		
 		Product newProduct = new Product();
-		boolean failed = false; // 길이 초과 등으로 저장 실패
+		boolean failed = false;
 		try {
-			//String sql = "INSERT INTO bs_product VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 			String sql = "SELECT * FROM bs_product where p_id=?";
 			pstmt = conn.prepareStatement(sql);
 
@@ -114,7 +108,6 @@
 				}
 			}
 		} catch (Exception e) {
-			// 상품 설명 500바이트(한글 약 166자) 초과 등 : 500 에러 대신 수정 폼으로 돌려보낸다
 			System.out.println("processUpdateProduct 에러 : " + e);
 			failed = true;
 		} finally {
@@ -124,7 +117,6 @@
 		}
 
 		if (failed) {
-			// 저장하지 못했으므로 새로 올라간 이미지 파일도 지운다
 			if (fileName != null) multi.getFile(frame).delete();
 			response.sendRedirect("updateProduct.jsp?error=db&id=" + java.net.URLEncoder.encode(productId, "UTF-8"));
 			return;

@@ -11,14 +11,6 @@ import java.util.Set;
 import dto.Product;
 import mvc.database.DBConnection;
 
-/**
- * AI 상품 추천 채팅 기능에 필요한 조회를 담당하는 DAO.
- * bs_purchase_history(구매 이력) + bs_product(상품 카탈로그)를 읽어서
- * AiChatController가 Ollama에 보낼 프롬프트를 구성할 수 있게 해준다.
- *
- * bs_purchase_history 테이블/스키마와 thanksCustomer.jsp는 Phase 1 산출물이며
- * 이 작업(Phase 2)에서는 건드리지 않는다. 여기서는 SELECT만 한다.
- */
 public class AiChatDAO {
 	private static AiChatDAO instance;
 
@@ -32,7 +24,6 @@ public class AiChatDAO {
 		return instance;
 	}
 
-	/** 회원이 실제로 구매한 상품(카테고리/제조사 포함) 목록. 최근 구매순. */
 	public List<Product> getPurchasedProducts(String id) {
 		List<Product> list = new ArrayList<Product>();
 		Connection conn = null;
@@ -67,7 +58,6 @@ public class AiChatDAO {
 		return list;
 	}
 
-	/** 카탈로그 전체 상품. 매장 규모가 작아서 전부 가져와 Ollama 프롬프트에 포함시킨다. */
 	public List<Product> getAllProducts() {
 		List<Product> list = new ArrayList<Product>();
 		Connection conn = null;
@@ -100,10 +90,6 @@ public class AiChatDAO {
 		return list;
 	}
 
-	/**
-	 * 카탈로그 상품을, 구매 이력과 같은 카테고리/제조사를 가진 상품이 앞에 오도록 정렬한다.
-	 * (요구사항: "구매 이력 기반 우선순위 + 전체 카탈로그"를 함께 준다 — 지나치게 좁히지 않는다)
-	 */
 	public List<Product> buildCandidateList(List<Product> allProducts, List<Product> purchased) {
 		final Set<String> categories = new LinkedHashSet<String>();
 		final Set<String> manufacturers = new LinkedHashSet<String>();

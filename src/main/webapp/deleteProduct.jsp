@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	// 관리자(admin) 계정만 접근 허용
 	String adminCheckId = (String) session.getAttribute("sessionId");
 	if (!"admin".equals(adminCheckId)) {
 		response.sendRedirect(request.getContextPath() + "/member/login.jsp");

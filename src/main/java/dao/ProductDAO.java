@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import dto.Product;
 import mvc.database.DBConnection;
 
-// bs_product 테이블 조회용 DAO
-// (ProductRepository 는 DB 연결 전 메모리 목록용이라 쓰지 않는다)
 public class ProductDAO {
 	private static ProductDAO instance = new ProductDAO();
 
@@ -41,6 +39,41 @@ public class ProductDAO {
 			}
 		} catch (Exception e) {
 			System.out.println("getAllProducts() 에러 : " + e);
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+
+	// 최근 등록 상품 N개 (상품 코드 역순 - 등록일 컬럼이 없어 p_id를 기준으로 삼는다)
+	public ArrayList<Product> getRecentProducts(int limit) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		ArrayList<Product> list = new ArrayList<Product>();
+		String sql = "select * from (select * from bs_product order by p_id desc) where rownum <= ?";
+
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, limit);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				list.add(toProduct(rs));
+			}
+		} catch (Exception e) {
+			System.out.println("getRecentProducts() 에러 : " + e);
 		} finally {
 			try {
 				if (rs != null)

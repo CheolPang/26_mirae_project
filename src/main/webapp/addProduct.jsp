@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-	// 관리자(admin) 계정만 접근 허용
 	String adminCheckId = (String) session.getAttribute("sessionId");
 	if (!"admin".equals(adminCheckId)) {
 		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
@@ -41,7 +40,6 @@
 			<div class="row">
 				<div class="col-md-12 mb-5 mb-md-0">
 					<h2 class="h3 mb-3 text-black"><fmt:message key="add-product-heading" /></h2>
-					<%-- processAddProduct.jsp 가 저장에 실패하면 error 를 붙여 이 페이지로 돌려보낸다 --%>
 					<% if ("dup".equals(request.getParameter("error"))) { %>
 					<div class="alert alert-danger" role="alert"><fmt:message key="error-dup" /></div>
 					<% } else if ("upload".equals(request.getParameter("error"))) { %>

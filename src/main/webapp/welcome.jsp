@@ -1,6 +1,19 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="dto.Product" %>
+<%@ page import="dao.ProductDAO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%!
+	private String nvl(String s) {
+		return s == null ? "" : s.trim();
+	}
+%>
+<%
+	ArrayList<Product> popularList = ProductDAO.getInstance().getRecentProducts(3);
+	DecimalFormat df = new DecimalFormat("#,##0");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,41 +79,23 @@
 					</div>
 					<!-- End Column 1 -->
 
-					<!-- Start Column 2 -->
+					<%
+					for (int i = 0; i < popularList.size(); i++) {
+						Product product = popularList.get(i);
+					%>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html"> <img
-							src="images/product-1.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Nordic Chair</h3> <strong
-							class="product-price">$50.00</strong> <span class="icon-cross">
+						<a class="product-item" href="product.jsp?id=<%=product.getProductId() %>">
+							<img src="${pageContext.request.contextPath}/upload/<%=product.getFilename() %>" class="img-fluid product-thumbnail" alt="<%=nvl(product.getPname()) %>">
+							<h3 class="product-title"><%=nvl(product.getPname()) %></h3>
+							<strong class="product-price"><%=df.format(product.getUnitPrice()) %><fmt:message key="currency-won" /></strong>
+							<span class="icon-cross">
 								<img src="images/cross.svg" class="img-fluid">
-						</span>
+							</span>
 						</a>
 					</div>
-					<!-- End Column 2 -->
-
-					<!-- Start Column 3 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html"> <img
-							src="images/product-2.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Kruzo Aero Chair</h3> <strong
-							class="product-price">$78.00</strong> <span class="icon-cross">
-								<img src="images/cross.svg" class="img-fluid">
-						</span>
-						</a>
-					</div>
-					<!-- End Column 3 -->
-
-					<!-- Start Column 4 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html"> <img
-							src="images/product-3.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Ergonomic Chair</h3> <strong
-							class="product-price">$43.00</strong> <span class="icon-cross">
-								<img src="images/cross.svg" class="img-fluid">
-						</span>
-						</a>
-					</div>
-					<!-- End Column 4 -->
+					<%
+					}
+					%>
 
 				</div>
 			</div>

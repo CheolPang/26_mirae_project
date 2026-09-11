@@ -15,7 +15,6 @@ import mvc.model.BoardDTO;
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static final int LISTCOUNT = 5; // 한 페이지에 보여 줄 게시글 수
-	// 글 저장 실패 시 폼 위에 띄울 문구 (bs_board.subject 100바이트 / content 1000바이트)
 	static final String SAVE_FAIL_MSG = "글을 저장하지 못했습니다. 제목은 한글 33자, 내용은 한글 333자 이내로 입력해 주세요.";
 
 	@Override
@@ -34,8 +33,6 @@ public class BoardController extends HttpServlet {
 		String contextPath = request.getContextPath();
 		System.out.println("contextPath: "+contextPath);
 		
-		// getRequestURI()는 forward("./BoardListAction.do") 시 "/./BoardListAction.do"처럼
-		// 정리되지 않은 경로가 들어와 비교가 실패하므로, 항상 "/xxx.do"로 정리되는 getServletPath()를 쓴다.
 		String command = request.getServletPath();
 		System.out.println("command: "+command);
 		
@@ -51,12 +48,8 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/BoardWriteAction.do")) {
 			if (requestBoardWrite(request)) {
-				// forward 하면 주소창이 BoardWriteAction.do 로 남아 새로고침 시 글이 또 등록되므로
-				// 목록 주소로 redirect 한다 (Post/Redirect/Get)
 				response.sendRedirect(contextPath + "/BoardListAction.do?pageNum=1");
 			} else {
-				// 저장 실패 시 목록으로 보내면 글이 조용히 사라진 것처럼 보이므로
-				// 입력한 제목/내용을 그대로 둔 채 작성 폼으로 되돌린다
 				request.setAttribute("errorMsg", SAVE_FAIL_MSG);
 				requestLoginName(request);
 				RequestDispatcher rd = request.getRequestDispatcher("./board/WriteForm.jsp");
@@ -65,7 +58,6 @@ public class BoardController extends HttpServlet {
 		} else if (command.equals("/BoardViewAction.do")) {
 			requestBoardView(request);
 			if (request.getAttribute("board") == null) {
-				// 삭제됐거나 없는 글 번호면 view.jsp 에서 NullPointerException(500)이 나므로 목록으로 보낸다
 				response.sendRedirect(contextPath + "/BoardListAction.do?pageNum=" + request.getAttribute("pageNum"));
 				return;
 			}
@@ -73,11 +65,9 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/BoardUpdateAction.do")) {
 			if (requestBoardUpdate(request)) {
-				// 글 등록과 같은 이유로 상세 보기 주소로 redirect 한다 (새로고침 시 재전송 방지)
 				response.sendRedirect(contextPath + "/BoardViewAction.do?num=" + request.getAttribute("num")
 						+ "&pageNum=" + request.getAttribute("pageNum"));
 			} else {
-				// 등록 실패와 같은 이유로, 입력한 내용을 유지한 채 수정 폼으로 되돌린다
 				request.setAttribute("errorMsg", SAVE_FAIL_MSG);
 				RequestDispatcher rd = request.getRequestDispatcher("./board/editForm.jsp");
 				rd.forward(request, response);

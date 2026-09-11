@@ -88,9 +88,6 @@
 
 	<%@ include file="footer.jsp"%>
 	<%
-		// 로그인한 회원이면 구매 이력(bs_purchase_history)에 남긴다.
-		// AI 상품 추천 기능(추후 작업)이 회원별 실제 구매 내역을 읽어올 수 있도록 하기 위함.
-		// 게스트(비로그인) 주문은 회원 아이디가 없으므로 이력을 남기지 않는다.
 		sessionId = (String) session.getAttribute("sessionId");
 		ArrayList<Product> purchasedList = (ArrayList<Product>) session.getAttribute("cartlist");
 		if (sessionId != null && purchasedList != null && !purchasedList.isEmpty()) {
@@ -121,9 +118,6 @@
 			}
 		}
 
-		// 주문이 끝났으므로 장바구니만 비운다.
-		// 예전에는 session.invalidate()로 세션 전체를 없애서
-		// 로그인 정보(sessionId)까지 함께 날아가 로그아웃되는 문제가 있었다.
 		session.removeAttribute("cartlist");
 		for (int i = 0; cookies != null && i < cookies.length; i++) {
 			Cookie thisCookie = cookies[i];

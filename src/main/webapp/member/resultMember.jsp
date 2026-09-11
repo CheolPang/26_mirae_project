@@ -26,7 +26,6 @@
 		</div>
 	</div>
 	<!-- End Hero Section -->
-	<%-- thanksCustomer.jsp / checkOutCancelled.jsp와 같은 알림 박스 + 이동 버튼 형태로 통일 --%>
 	<div class="untree_co-section before-footer-section">
 		<div class="container">
 			<div class="row mb-5">

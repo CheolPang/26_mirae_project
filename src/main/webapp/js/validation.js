@@ -1,11 +1,7 @@
-// DB(Oracle, AL32UTF8) 의 varchar2 길이는 글자 수가 아니라 바이트 기준이다. (한글 1자 = 3바이트)
-// textarea 의 줄바꿈은 전송될 때 \r\n(2바이트)이 되므로 그에 맞춰 센다.
 function utf8Length(text) {
 	return new TextEncoder().encode(text.replace(/\r?\n/g, "\r\n")).length;
 }
 
-// 칼럼 크기(max 바이트)를 넘으면 알리고 그 칸으로 이동한다.
-// 넘긴 채로 보내면 DB 저장이 실패한다.
 function checkBytes(input, max, label) {
 	if (utf8Length(input.value) <= max) {
 		return true;
@@ -15,7 +11,6 @@ function checkBytes(input, max, label) {
 	return false;
 }
 
-// 업로드 최대 크기 (processAddProduct.jsp / processUpdateProduct.jsp 의 maxSize 와 같게)
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 function checkAddProduct(){

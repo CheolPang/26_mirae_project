@@ -11,16 +11,13 @@
 	}
 %>
 <%
-	// 관리자(admin) 계정만 접근 허용
 	String adminCheckId = (String) session.getAttribute("sessionId");
 	if (!"admin".equals(adminCheckId)) {
 		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
 		return;
 	}
 
-	// 메뉴의 "상품 수정"(edit=update) / "상품 삭제"(edit=delete). 값이 없으면 수정 모드
 	boolean deleteMode = "delete".equals(request.getParameter("edit"));
-	// key 속성에 삼항식을 직접 넣으면 따옴표 중첩이 헷갈리므로 미리 변수로 뺀다.
 	String modeTitleKey = deleteMode ? "menu-product-delete" : "menu-product-update";
 	String modeSelectKey = deleteMode ? "select-to-delete" : "select-to-update";
 

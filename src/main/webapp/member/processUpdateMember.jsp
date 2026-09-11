@@ -23,7 +23,6 @@
 
 <sql:setDataSource var="dataSource" url="jdbc:oracle:thin:@localhost:1521:xe" driver="oracle.jdbc.driver.OracleDriver" user="C##dbexam" password="m1234"/>
 
-<%-- 칼럼 크기 초과 등으로 update 가 실패해도 500 에러 대신 수정 폼으로 돌려보낸다 --%>
 <c:catch var="updateError">
 <sql:update dataSource="${dataSource}" var="resultSet">
 	UPDATE bs_member SET password = ?, name = ?, gender = ?, birth = ?, mail = ?, phone = ?, address = ? WHERE id = ?

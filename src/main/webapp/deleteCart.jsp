@@ -13,8 +13,6 @@
 		response.sendRedirect("cart.jsp");
 		return;
 	}
-	// 장바구니만 비운다. session.invalidate()를 쓰면
-	// 로그인 정보(sessionId)까지 사라져 로그아웃된다.
 	session.removeAttribute("cartlist");
 	response.sendRedirect("cart.jsp");
 	%>

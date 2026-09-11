@@ -19,7 +19,6 @@
 			alert("<fmt:message key="board-content-required-alert" />");
 			return false;
 		}
-		// bs_board.subject 100바이트 / content 1000바이트
 		if(!checkBytes(document.newWrite.subject, 100, "<fmt:message key="board-subject-label" />") || !checkBytes(document.newWrite.content, 1000, "<fmt:message key="board-content-label" />")) {
 			return false;
 		}
@@ -77,7 +76,6 @@
 								<div class="col-md-12 mb-3">
 									<label for="content" class="text-black"><fmt:message key="board-content-label" /> <span
 										class="text-danger">*</span></label>
-									<%-- 저장에 실패해 돌아온 경우(BoardWriteAction.do) 입력했던 값을 다시 채운다 --%>
 									<fmt:message key="board-content-placeholder" var="boardContentPlaceholder" />
 									<textarea class="form-control" name="content" id="content" rows="15" placeholder="${boardContentPlaceholder}"><c:out value="${param.content}"/></textarea>
 								</div>

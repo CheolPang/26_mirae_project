@@ -11,8 +11,6 @@
 		return s == null ? "" : s.trim();
 	}
 
-	// 조건 코드(DB 저장값: New/Old/Refurbished/Recycled)를 bundle.message 키로 매핑한다.
-	// 실제 표시 문구는 <fmt:message>로 렌더링한다 (DB 값 자체가 아니라 UI 라벨이므로 다국어화 대상).
 	private String conditionKey(String condition) {
 		if ("New".equalsIgnoreCase(condition)) return "condition_New";
 		if ("Old".equalsIgnoreCase(condition)) return "condition_Old";

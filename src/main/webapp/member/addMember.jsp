@@ -42,14 +42,12 @@
 			alert("${msgNameRequired}")
 			return false;
 		}
-		// bs_member 칼럼 크기(바이트)를 넘으면 가입이 실패하므로 미리 막는다
 		const f = document.newMember;
 		if (!checkBytes(f.id, 20, "${lblId}") || !checkBytes(f.pw, 20, "${lblPw}")
 				|| !checkBytes(f.name, 30, "${lblName}") || !checkBytes(f.email, 30, "${lblEmail}")
 				|| !checkBytes(f.contact, 30, "${lblContact}") || !checkBytes(f.address, 100, "${lblAddress}")) {
 			return false;
 		}
-		// form 의 onsubmit 에서 호출되므로 submit() 대신 true 를 돌려주면 전송된다
 		return true;
 	}
 </script>
@@ -77,9 +75,7 @@
 				<div class="col-md-12 mb-5 mb-md-0">
 					<h2 class="h3 mb-3 text-black"><fmt:message key="member-info-input-heading" /></h2>
 					<div class="p-3 p-lg-5 border bg-white signForm">
-						<%-- onsubmit 이 없으면 checkForm()(비밀번호 확인 등)이 실행되지 않는다 --%>
 						<form name="newMember" action="processAddMember.jsp" method="POST" onsubmit="return checkForm()">
-							<%-- processAddMember.jsp 가 가입에 실패하면 error 와 입력값을 가지고 이 페이지로 forward 한다 --%>
 							<c:if test="${param.error eq 'dup'}">
 								<div class="alert alert-danger" role="alert"><fmt:message key="member-signup-error-dup" /></div>
 							</c:if>

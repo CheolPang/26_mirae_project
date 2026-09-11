@@ -105,7 +105,6 @@
 					</div>
 				</div>
 
-				<!-- 페이지 번호(가운데) + 글쓰기 버튼(오른쪽, 로그인한 경우만) -->
 				<div class="board-footer">
 					<c:set value="<%=pageNum%>" var="pageNum" />
 					<c:set value="<%=total_page%>" var="totalPage" />

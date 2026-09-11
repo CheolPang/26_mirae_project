@@ -24,7 +24,6 @@
 		return;
 	}
 
-	// 저장에 실패해 돌아온 경우(BoardUpdateAction.do) DB 값 대신 방금 입력한 값을 다시 채운다
 	String subject = board.getSubject();
 	String content = board.getContent();
 	if (request.getAttribute("errorMsg") != null) {
@@ -51,7 +50,6 @@
 			alert("<fmt:message key="board-content-required-alert" />");
 			return false;
 		}
-		// bs_board.subject 100바이트 / content 1000바이트
 		if(!checkBytes(document.editWrite.subject, 100, "<fmt:message key="board-subject-label" />") || !checkBytes(document.editWrite.content, 1000, "<fmt:message key="board-content-label" />")) {
 			return false;
 		}

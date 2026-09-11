@@ -10,7 +10,6 @@
 	}
 %>
 <%
-	// 관리자(admin) 계정만 접근 허용
 	String adminCheckId = (String) session.getAttribute("sessionId");
 	if (!"admin".equals(adminCheckId)) {
 		response.sendRedirect(request.getContextPath() + "/member/login.jsp");
@@ -23,10 +22,6 @@
 		return;
 	}
 
-	// 상품 상태: DB에 "new"(초기 데이터) / "New"(상품 등록 폼)가 섞여 있으므로 대소문자 구분 없이 비교.
-	// 어느 것에도 맞지 않으면 첫 번째(New)를 선택해 둔다.
-	// 라벨(두 번째 칸)은 더 이상 하드코딩 문자열이 아니라 bundle.message 키 이름을 담아
-	// <fmt:message>로 렌더링한다 (product.jsp의 conditionKey()와 같은 키 이름).
 	String[][] conditions = {
 		{"New", "condition_New"}, {"Old", "condition_Old"}, {"Refurbished", "condition_Refurbished"}, {"Recycled", "condition_Recycling"}
 	};
@@ -63,13 +58,11 @@
 	<div class="shop-section">
 		<div class="container">
 			<h2 class="h3 mb-3 text-black"><fmt:message key="update-product-title" /></h2>
-			<%-- processUpdateProduct.jsp 가 저장에 실패하면 error 를 붙여 이 페이지로 돌려보낸다 --%>
 			<% if ("upload".equals(request.getParameter("error"))) { %>
 			<div class="alert alert-danger" role="alert"><fmt:message key="error-upload-image" /></div>
 			<% } else if ("db".equals(request.getParameter("error"))) { %>
 			<div class="alert alert-danger" role="alert"><fmt:message key="error-db-save" /></div>
 			<% } %>
-			<%-- 업로드가 실패하면 본문(productId)을 읽을 수 없으므로 상품 코드를 주소에도 붙여 둔다 --%>
 			<form action="./processUpdateProduct.jsp?id=<%=product.getProductId() %>" name="updateProduct" method="POST" enctype="multipart/form-data">
 				<div class="row g-5">
 					<!-- 왼쪽 : 상품 상세와 같은 이미지 영역 -->

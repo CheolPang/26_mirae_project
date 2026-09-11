@@ -10,18 +10,6 @@ import java.util.Map;
 
 import mvc.util.MiniJson;
 
-/**
- * Ollama의 /api/chat 엔드포인트를 호출하는 아주 작은 클라이언트.
- *
- * /api/generate 대신 /api/chat을 쓰는 이유: 이 기능은 "자유 채팅형"으로 최근 대화
- * 턴(role=user/assistant)을 이어서 보내야 하는데, /api/chat은 messages 배열(role +
- * content)을 그대로 받아 그 형태와 정확히 맞아떨어진다. /api/generate로 하려면
- * system/history/product-list를 매번 하나의 긴 문자열로 직접 이어붙여야 해서
- * 번거롭고 실수하기 쉽다.
- *
- * 통신은 표준 JDK의 java.net.http.HttpClient를 쓴다(JDK 11+ 표준, 이 프로젝트는
- * JDK 17로 컴파일/JDK 21 런타임이라 별도 라이브러리 없이 바로 쓸 수 있다).
- */
 public class OllamaClient {
 
 	public static class OllamaResult {
@@ -49,15 +37,11 @@ public class OllamaClient {
 	private final Duration timeout;
 
 	public OllamaClient(String baseUrl, String model, Duration timeout) {
-		// 끝에 슬래시가 있어도/없어도 동작하도록 정리
 		this.baseUrl = (baseUrl == null ? "" : baseUrl).replaceAll("/+$", "");
 		this.model = model;
 		this.timeout = timeout;
 	}
 
-	/**
-	 * messages: [{"role":"system"|"user"|"assistant", "content":"..."}, ...] 순서대로.
-	 */
 	public OllamaResult chat(List<Map<String, String>> messages) {
 		if (baseUrl.isEmpty() || model == null || model.isEmpty()) {
 			System.out.println("OllamaClient: baseUrl/model이 설정되지 않음 (WEB-INF/ollama.properties 확인)");
@@ -93,7 +77,6 @@ public class OllamaClient {
 			return OllamaResult.success(content.trim());
 
 		} catch (java.net.ConnectException e) {
-			// Ollama 주소에 아무것도 떠 있지 않을 때(placeholder 주소 등)
 			System.out.println("OllamaClient: 연결 실패(ConnectException) - " + e.getMessage());
 			return OllamaResult.failure("connection_refused", "지금은 추천을 받을 수 없어요.");
 		} catch (java.net.http.HttpTimeoutException e) {
@@ -110,11 +93,8 @@ public class OllamaClient {
 		sb.append("{");
 		sb.append("\"model\":\"").append(MiniJson.escape(model)).append("\",");
 		sb.append("\"stream\":false,");
-		// qwen3처럼 "thinking" 기능이 있는 모델은 기본적으로 답하기 전에 긴 추론 과정을
-		// 거치는데, 이게 몇십 초씩 걸려 아래 OLLAMA_TIMEOUT(18초)을 거의 항상 넘겨버린다.
-		// think:false로 꺼서 바로 답만 받는다. (이 필드는 thinking을 지원하지 않는
-		// 모델에서는 그냥 무시되므로 다른 모델에 영향 없음)
 		sb.append("\"think\":false,");
+		sb.append("\"keep_alive\":\"30m\",");
 		sb.append("\"messages\":[");
 		for (int i = 0; i < messages.size(); i++) {
 			Map<String, String> m = messages.get(i);

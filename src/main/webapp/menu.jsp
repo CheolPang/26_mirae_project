@@ -6,15 +6,11 @@
 <%
 	String sessionId = (String) session.getAttribute("sessionId");
 
-	// 언어 링크: "?language=ko" 만 쓰면 현재 주소의 파라미터(num, pageNum, id ...)가 사라져
-	// 게시글 보기 등에서 500 에러가 나므로, 기존 파라미터는 두고 language 만 바꾼다.
 	String langQuery = request.getQueryString() == null ? ""
 			: request.getQueryString().replaceAll("(^|&)language=[^&]*", "").replaceFirst("^&", "");
 	String langHref = ("?" + (langQuery.isEmpty() ? "" : langQuery + "&") + "language=")
 			.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;");
 %>
-<%-- menu.jsp는 거의 모든 페이지에 static include 되므로, 포함하는 페이지가 매번
-     fmt:bundle을 감쌀 필요 없이 여기서 스스로 로케일/번들을 설정한다. --%>
 <fmt:setLocale value='<%=request.getParameter("language")%>' />
 <fmt:bundle basename="bundle.message">
 <head>

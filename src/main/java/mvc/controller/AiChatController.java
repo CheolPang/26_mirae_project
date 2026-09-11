@@ -24,23 +24,10 @@ import mvc.model.OllamaClient;
 import mvc.model.OllamaClient.OllamaResult;
 import mvc.util.MiniJson;
 
-/**
- * AI 상품 추천 채팅 기능의 백엔드 엔드포인트. (/AiChatAction.do)
- *
- * BoardController(mvc.controller / *.do)와 같은 스타일의 Model2 서블릿으로 만들되,
- * 이 기능은 게시판처럼 목록/폼을 forward할 필요가 없고 JS fetch()가 JSON을 그대로
- * 받아가면 되므로 응답을 JSP로 forward하지 않고 이 서블릿에서 바로 JSON을 써서 내려준다.
- *
- * DB 접근은 mvc.database.DBConnection을 재사용하는 mvc.model.AiChatDAO를 통해서 한다
- * (dbconn.jsp 방식이 아니라 DBConnection을 고른 이유: 이 서블릿이 dbconn.jsp를 쓰는
- * 구식 JSP가 아니라 BoardController와 같은 mvc.controller 패키지의 서블릿이라
- * 같은 패키지 계열인 mvc.database.DBConnection을 쓰는 게 프로젝트 관례와 맞는다).
- */
 public class AiChatController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// Ollama 호출 타임아웃(요구사항: 약 15~20초)
-	private static final Duration OLLAMA_TIMEOUT = Duration.ofSeconds(18);
+	private static final Duration OLLAMA_TIMEOUT = Duration.ofSeconds(30);
 
 	private static final String SYSTEM_PROMPT_HEADER =
 			"당신은 가구 쇼핑몰 CPShop의 챗봇입니다. "
@@ -62,7 +49,6 @@ public class AiChatController extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			// 1) 로그인 확인 (다른 페이지들과 동일하게 session의 "sessionId" 속성으로 체크)
 			HttpSession session = request.getSession(false);
 			String sessionId = (session == null) ? null : (String) session.getAttribute("sessionId");
 
@@ -71,7 +57,6 @@ public class AiChatController extends HttpServlet {
 				return;
 			}
 
-			// 2) 요청 바디(JSON) 파싱: { "message": "...", "history": [{"role":"user|assistant","content":"..."}] }
 			String body = readBody(request);
 			Map<String, Object> reqJson = MiniJson.parseObject(body);
 			String userMessage = MiniJson.getString(reqJson, "message", "").trim();
@@ -81,7 +66,6 @@ public class AiChatController extends HttpServlet {
 				return;
 			}
 
-			// 3) 구매 이력 + 카탈로그 조회 (admin은 구매 이력이 없는 게 정상 — 빈 목록으로 처리)
 			AiChatDAO dao = AiChatDAO.getInstance();
 			List<Product> purchased = dao.getPurchasedProducts(sessionId);
 			List<Product> allProducts = dao.getAllProducts();
@@ -90,13 +74,11 @@ public class AiChatController extends HttpServlet {
 			String purchaseSummary = buildPurchaseSummary(sessionId, purchased);
 			String catalogText = buildCatalogText(candidates);
 
-			// 검증용 로그: Ollama 응답이 없어도 프롬프트 구성 로직이 정상인지 콘솔에서 확인할 수 있게 남긴다.
 			System.out.println("[AiChatController] sessionId=" + sessionId
 					+ " purchasedCount=" + purchased.size()
 					+ " candidateCount=" + candidates.size());
 			System.out.println("[AiChatController] purchaseSummary=\n" + purchaseSummary);
 
-			// 4) Ollama에 보낼 messages 구성: system + (product/history 컨텍스트) + 최근 대화 + 새 메시지
 			List<Map<String, String>> messages = new ArrayList<Map<String, String>>();
 			messages.add(role("system", SYSTEM_PROMPT_HEADER
 					+ "\n\n[회원 구매 이력]\n" + purchaseSummary
@@ -118,7 +100,6 @@ public class AiChatController extends HttpServlet {
 			}
 			messages.add(role("user", userMessage));
 
-			// 5) Ollama 호출 (설정 안 됐거나 연결 실패/타임아웃이면 graceful 에러)
 			Properties config = loadOllamaConfig();
 			String ollamaBaseUrl = config.getProperty("ollama.baseUrl", "").trim();
 			String ollamaModel = config.getProperty("ollama.model", "").trim();
@@ -133,7 +114,6 @@ public class AiChatController extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			// 어떤 예외가 나도 500 에러 페이지가 아니라 JSON으로 응답한다.
 			System.out.println("[AiChatController] 처리 중 예외: " + e);
 			e.printStackTrace();
 			out.print(jsonReply(false, "server_error", "지금은 답변을 받을 수 없습니다."));
@@ -143,12 +123,9 @@ public class AiChatController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// 이 기능은 POST 전용. 브라우저에서 실수로 GET 하는 경우에도 500 대신 안내만 준다.
 		response.setContentType("application/json; charset=UTF-8");
 		response.getWriter().print(jsonReply(false, "method_not_allowed", "지금은 추천을 받을 수 없어요."));
 	}
-
-	// ------------------------------------------------------------------
 
 	private Map<String, String> role(String role, String content) {
 		Map<String, String> m = new LinkedHashMap<String, String>();
@@ -212,10 +189,6 @@ public class AiChatController extends HttpServlet {
 		return (s == null || s.isEmpty()) ? "-" : s;
 	}
 
-	/**
-	 * WEB-INF/ollama.properties 를 매 요청마다 다시 읽는다.
-	 * (서버 재시작/재배포 없이 주소만 바꿔서 반영할 수 있도록 하기 위함 — 파일 자체가 크지 않아 부담 없음)
-	 */
 	private Properties loadOllamaConfig() {
 		Properties props = new Properties();
 		try (InputStream in = getServletContext().getResourceAsStream("/WEB-INF/ollama.properties")) {
