@@ -106,7 +106,7 @@
 						</li>
 						<li><a class="nav-link" href="<c:url value="/products.jsp"/>"><fmt:message key="menu-product-list" /></a><!-- products list --></li>
 						<li><a class="nav-link" href="<c:url value='/BoardListAction.do?pageNum=1'/>"><fmt:message key="menu-board" /></a></li><!-- contact -->
-						<li><a class="nav-link" href="<c:url value="/about.html"/>"><fmt:message key="report" /></a></li><!-- contact -->
+						<li><a class="nav-link" href="<c:url value="/contact.jsp"/>"><fmt:message key="report" /></a></li><!-- contact -->
 
 						        <li class="nav-item dropdown">
 						          <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -133,9 +133,6 @@
 								            <li><a class="dropdown-item" href="<c:url value="/member/updateMember.jsp"/>"><fmt:message key="menu-update-member" /></a></li>
 							            </c:otherwise>
 						            </c:choose>
-						            <li><hr class="dropdown-divider"></li>
-						            <li><a class="dropdown-item" href="#"><fmt:message key="menu-order-info" /></a></li>
-						            <li><a class="dropdown-item" href="#"><fmt:message key="menu-shipping-info" /></a></li>
 							</ul>
 						</li>
 						<li><a class="nav-link" href="<c:url value="/cart.jsp"/>"><img src="<%=request.getContextPath()%>/images/cart.svg"></a></li>

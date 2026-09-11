@@ -41,22 +41,22 @@
 
 				<div class="row mb-5">
 					<div class="boardBar">
-						<div class="pageNum text-start">
+						<div class="shop-count mb-0">
 							<fmt:message key="board-total-count" />
-							<%=total_record%><fmt:message key="board-count-unit" />
+							<strong><%=total_record%></strong><fmt:message key="board-count-unit" />
 						</div>
-						<div class="pageNum text-end">
+						<div class="d-flex align-items-center flex-wrap gap-2">
 							<fmt:message key="board-search-subject" var="boardSearchSubject" />
 							<fmt:message key="board-search-content" var="boardSearchContent" />
 							<fmt:message key="board-search-writer" var="boardSearchWriter" />
-							<select name="items">
+							<select name="items" class="form-select form-select-sm w-auto">
 								<option value="subject" ${param.items eq 'subject' ? 'selected' : ''}>${boardSearchSubject}</option>
 								<option value="content" ${param.items eq 'content' ? 'selected' : ''}>${boardSearchContent}</option>
 								<option value="name" ${param.items eq 'name' ? 'selected' : ''}>${boardSearchWriter}</option>
 							</select>
-							<input type="text" name="text" value="<c:out value='${param.text}'/>" />
+							<input type="text" name="text" class="form-control form-control-sm w-auto" value="<c:out value='${param.text}'/>" />
 							<fmt:message key="board-search-btn" var="boardSearchBtn" />
-							<input type="submit" value="${boardSearchBtn}" class="btn btn-sm btn-primary ms-1" />
+							<input type="submit" value="${boardSearchBtn}" class="btn btn-sm btn-primary" />
 							<fmt:message key="board-search-reset-btn" var="boardSearchResetBtn" />
 							<a href="<c:url value='/BoardListAction.do?pageNum=1'/>" class="btn btn-sm btn-danger">${boardSearchResetBtn}</a>
 						</div>

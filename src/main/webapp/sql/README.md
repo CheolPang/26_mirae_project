@@ -9,6 +9,7 @@
 | `02_insert_data.sql` | C##dbexam | 초기 데이터 (관리자/회원, 상품 3개, 게시글 1개) |
 | `99_drop_all.sql` | C##dbexam | 테이블/시퀀스 전부 삭제 (초기화) |
 | `setup_all.sql` | C##dbexam | `99` → `01` → `02` 한 번에 실행 |
+| `insert_new_products.sql` | C##dbexam | 다나와에서 수집한 신규 상품 20개(P1237~P1256) 추가. 이미지는 `webapp/upload/`에 이미 있음. (실행 전 `docs/demo-product/P1257-demo.md` 상품은 시연용으로 여기 포함 안 됨 — 관리자 화면에서 직접 등록할 것) |
 | `queries/` | - | 개발 중 쓰던 테스트 쿼리 모음 (세팅할 때 실행 X) |
 
 ## 새 컴퓨터 세팅 순서
@@ -58,7 +59,7 @@
   - SQL Developer: 도구 → 환경설정 → 환경 → 인코딩을 `UTF-8`로 설정한 뒤 파일 열기
   - SQL*Plus: 실행 전에 `set NLS_LANG=KOREAN_KOREA.AL32UTF8`
 - 접속 정보(`C##dbexam` / `m1234`)를 바꾸려면 `dbconn.jsp`, `mvc/database/DBConnection.java` 두 곳을 같이 고쳐야 한다.
-- 상품 이미지 파일(`P1234~P1236.jpg`)은 `webapp/upload/` 폴더에 있어야 한다.
+- 상품 이미지 파일(`P1234~P1256.jpg`)은 `webapp/upload/` 폴더에 있어야 한다.
   관리자가 새로 올린 이미지도 이 폴더에 쌓이므로(위 Eclipse 서버 설정 필요) 다른 컴퓨터로 옮길 때 같이 커밋한다.
 
 ## AI 상품 추천 챗봇 설정 (WEB-INF/ollama.properties)

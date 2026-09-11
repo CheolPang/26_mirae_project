@@ -13,7 +13,9 @@ function changeQty(delta) {
 	document.querySelector("#totalPrice").textContent = (price * value).toLocaleString("ko-KR") + "원";
 }
 
-function addToCart() {
+// confirmMsg: 담기 전 확인창에 띄울 문구 (다국어 처리를 위해 호출하는 JSP에서 넘겨준다).
+function addToCart(confirmMsg) {
+	if (confirmMsg && !confirm(confirmMsg)) return;
 	document.addForm.buy.value = "";
 	document.addForm.submit();
 }

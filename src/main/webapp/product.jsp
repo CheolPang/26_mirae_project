@@ -102,6 +102,7 @@
 				<fmt:message key="decrease-qty" var="decreaseQtyLabel" />
 				<fmt:message key="increase-qty" var="increaseQtyLabel" />
 				<fmt:message key="quantity" var="quantityLabel" />
+				<fmt:message key="confirm-add-to-cart" var="confirmAddToCart" />
 
 				<form action="addCart.jsp" name="addForm" method="post" data-price="<%=product.getUnitPrice() %>">
 					<input type="hidden" name="id" value="<%=product.getProductId() %>">
@@ -122,7 +123,7 @@
 					</div>
 
 					<div class="product-actions">
-						<button type="button" class="btn btn-outline-shop" onclick="addToCart()" <%=soldOut ? "disabled" : "" %>><fmt:message key="add-to-cart-btn" /></button>
+						<button type="button" class="btn btn-outline-shop" onclick="addToCart('${confirmAddToCart}')" <%=soldOut ? "disabled" : "" %>><fmt:message key="add-to-cart-btn" /></button>
 						<button type="button" class="btn btn-primary" onclick="buyNow()" <%=soldOut ? "disabled" : "" %>>
 							<c:choose>
 								<c:when test="<%=soldOut%>"><fmt:message key="sold-out" /></c:when>

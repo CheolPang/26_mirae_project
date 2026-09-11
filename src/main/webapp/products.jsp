@@ -41,7 +41,6 @@
 
 	<div class="shop-section">
 		<div class="container">
-			<p class="shop-count"><fmt:message key="shop-count"><fmt:param value="<%=productList.size()%>"/></fmt:message></p>
 
 			<div class="product-grid">
 				<%
