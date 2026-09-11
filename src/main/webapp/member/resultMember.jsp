@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value='<%=request.getParameter("language")%>' />
+<fmt:bundle basename="bundle.message">
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,39 +18,39 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>회원 정보</h1>
+						<h1><fmt:message key="member-info-title" /></h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- End Hero Section -->
 	<div class="untree_co-section before-footer-section">
 		<div class="container">
 			<div class="row mb-5">
-			<%
-				String msg = request.getParameter("msg");
-				if(msg != null) {
-					if (msg.equals("0")) {
-						out.print("회원정보가 업데이트 되었습니다.");
-					} else if (msg.equals("1")) {
-						out.print("<h2>회원가입이 완료되었습니다. 다시 로그인해주세요.</h2>");
-					} else if (msg.equals("2")) {
-						String loginId = (String) session.getAttribute("sessionId");
-						out.print("<h2>"+loginId+"님 로그인되었습니다. 환영합니다.</h2>");
-					} else if (msg.equals("3")) {
-						String loginId = (String) session.getAttribute("sessionId");
-						out.print("<h2>정상 탈퇴 처리되었습니다.</h2>");
-					}
-				} else {
-					out.print("회원정보가 존재하지 않습니다.");
-				}
-			%>
+			<c:choose>
+				<c:when test="${param.msg eq '0'}">
+					<fmt:message key="member-info-updated" />
+				</c:when>
+				<c:when test="${param.msg eq '1'}">
+					<h2><fmt:message key="member-signup-complete" /></h2>
+				</c:when>
+				<c:when test="${param.msg eq '2'}">
+					<h2><fmt:message key="member-welcome-login"><fmt:param value="${sessionScope.sessionId}" /></fmt:message></h2>
+				</c:when>
+				<c:when test="${param.msg eq '3'}">
+					<h2><fmt:message key="member-withdraw-complete" /></h2>
+				</c:when>
+				<c:when test="${empty param.msg}">
+					<fmt:message key="member-info-not-found" />
+				</c:when>
+			</c:choose>
 			</div>
 		</div>
 	</div>
 	<%@ include file="/footer.jsp" %>
 </body>
 </html>
+</fmt:bundle>

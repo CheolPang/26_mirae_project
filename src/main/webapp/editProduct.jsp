@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="dto.Product" %>
 <%@ page import="dao.ProductDAO" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%!
 	private String nvl(String s) {
 		return s == null ? "" : s.trim();
@@ -19,18 +20,24 @@
 
 	// 메뉴의 "상품 수정"(edit=update) / "상품 삭제"(edit=delete). 값이 없으면 수정 모드
 	boolean deleteMode = "delete".equals(request.getParameter("edit"));
+	// key 속성에 삼항식을 직접 넣으면 따옴표 중첩이 헷갈리므로 미리 변수로 뺀다.
+	String modeTitleKey = deleteMode ? "menu-product-delete" : "menu-product-update";
+	String modeSelectKey = deleteMode ? "select-to-delete" : "select-to-update";
 
 	ArrayList<Product> productList = ProductDAO.getInstance().getAllProducts();
 	DecimalFormat df = new DecimalFormat("#,##0");
 %>
+<fmt:setLocale value='<%=request.getParameter("language")%>' />
+<fmt:bundle basename="bundle.message">
+<fmt:message key="confirm-delete-product" var="confirmDeleteMsg" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CPShop | <%=deleteMode ? "상품 삭제" : "상품 수정" %></title>
+<title>CPShop | <fmt:message key="<%=modeTitleKey%>" /></title>
 <script>
 	function deleteConfirm(id) {
-		if (confirm("해당 상품을 정말 삭제하시겠습니까?") == true) {
+		if (confirm("${confirmDeleteMsg}") == true) {
 			location.href="deleteProduct.jsp?id=" + id;
 		}
 	}
@@ -45,7 +52,7 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1><%=deleteMode ? "상품 삭제" : "상품 수정" %></h1>
+						<h1><fmt:message key="<%=modeTitleKey%>" /></h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
@@ -56,7 +63,11 @@
 
 	<div class="shop-section">
 		<div class="container">
-			<p class="shop-count">전체 <strong><%=productList.size() %></strong>개 &middot; <%=deleteMode ? "삭제" : "수정" %>할 상품을 선택하세요.</p>
+			<p class="shop-count">
+				<fmt:message key="shop-count"><fmt:param value="<%=productList.size()%>"/></fmt:message>
+				&middot;
+				<fmt:message key="<%=modeSelectKey%>" />
+			</p>
 
 			<div class="product-grid">
 				<%
@@ -67,19 +78,19 @@
 					<div class="product-card-thumb">
 						<img src="${pageContext.request.contextPath}/upload/<%=product.getFilename() %>" alt="<%=nvl(product.getPname()) %>" loading="lazy">
 						<% if (product.getUnitsInStock() <= 0) { %>
-						<span class="product-soldout">품절</span>
+						<span class="product-soldout"><fmt:message key="sold-out" /></span>
 						<% } %>
 					</div>
 					<div class="product-card-body">
 						<div class="product-brand"><%=nvl(product.getManufacturer()) %> &middot; <%=product.getProductId() %></div>
 						<div class="product-card-name"><%=nvl(product.getPname()) %></div>
-						<div class="product-card-price"><%=df.format(product.getUnitPrice()) %>원</div>
+						<div class="product-card-price"><%=df.format(product.getUnitPrice()) %><fmt:message key="currency-won" /></div>
 					</div>
 					<div class="product-card-admin">
 						<% if (deleteMode) { %>
-						<button type="button" onclick="deleteConfirm('<%=product.getProductId() %>')" class="btn btn-danger w-100">상품 삭제</button>
+						<button type="button" onclick="deleteConfirm('<%=product.getProductId() %>')" class="btn btn-danger w-100"><fmt:message key="menu-product-delete" /></button>
 						<% } else { %>
-						<a href="updateProduct.jsp?id=<%=product.getProductId() %>" class="btn btn-primary w-100">정보 수정</a>
+						<a href="updateProduct.jsp?id=<%=product.getProductId() %>" class="btn btn-primary w-100"><fmt:message key="edit-info" /></a>
 						<% } %>
 					</div>
 				</div>
@@ -89,10 +100,11 @@
 			</div>
 
 			<% if (productList.isEmpty()) { %>
-			<p class="shop-empty">등록된 상품이 없습니다.</p>
+			<p class="shop-empty"><fmt:message key="no-products" /></p>
 			<% } %>
 		</div>
 	</div>
 	<%@ include file="footer.jsp" %>
 </body>
 </html>
+</fmt:bundle>

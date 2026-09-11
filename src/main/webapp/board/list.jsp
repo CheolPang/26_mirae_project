@@ -3,11 +3,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value='<%=request.getParameter("language")%>' />
+<fmt:bundle basename="bundle.message">
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CPShop | 게시판</title>
+<title>CPShop | <fmt:message key="board-title" /></title>
 </head>
 <body>
 	<%@ include file="/menu.jsp"%>
@@ -19,7 +22,7 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>게시판</h1>
+						<h1><fmt:message key="board-title" /></h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
@@ -39,18 +42,23 @@
 				<div class="row mb-5">
 					<div class="boardBar">
 						<div class="pageNum text-start">
-							전체
-							<%=total_record%>건
+							<fmt:message key="board-total-count" />
+							<%=total_record%><fmt:message key="board-count-unit" />
 						</div>
 						<div class="pageNum text-end">
+							<fmt:message key="board-search-subject" var="boardSearchSubject" />
+							<fmt:message key="board-search-content" var="boardSearchContent" />
+							<fmt:message key="board-search-writer" var="boardSearchWriter" />
 							<select name="items">
-								<option value="subject" ${param.items eq 'subject' ? 'selected' : ''}>제목에서</option>
-								<option value="content" ${param.items eq 'content' ? 'selected' : ''}>본문에서</option>
-								<option value="name" ${param.items eq 'name' ? 'selected' : ''}>글쓴이에서</option>
-							</select> 
-							<input type="text" name="text" value="<c:out value='${param.text}'/>" /> 
-							<input type="submit" value="검색" class="btn btn-sm btn-primary ms-1" />
-							<a href="<c:url value='/BoardListAction.do?pageNum=1'/>" class="btn btn-sm btn-danger">검색 초기화</a>
+								<option value="subject" ${param.items eq 'subject' ? 'selected' : ''}>${boardSearchSubject}</option>
+								<option value="content" ${param.items eq 'content' ? 'selected' : ''}>${boardSearchContent}</option>
+								<option value="name" ${param.items eq 'name' ? 'selected' : ''}>${boardSearchWriter}</option>
+							</select>
+							<input type="text" name="text" value="<c:out value='${param.text}'/>" />
+							<fmt:message key="board-search-btn" var="boardSearchBtn" />
+							<input type="submit" value="${boardSearchBtn}" class="btn btn-sm btn-primary ms-1" />
+							<fmt:message key="board-search-reset-btn" var="boardSearchResetBtn" />
+							<a href="<c:url value='/BoardListAction.do?pageNum=1'/>" class="btn btn-sm btn-danger">${boardSearchResetBtn}</a>
 						</div>
 					</div>
 
@@ -58,12 +66,12 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th class="board-num">번호</th>
-									<th class="board-subject">제목</th>
-									<th class="board-date">작성일</th>
-									<th class="board-date">수정일</th>
-									<th class="board-hit">조회</th>
-									<th class="board-name">글쓴이</th>
+									<th class="board-num"><fmt:message key="board-num-th" /></th>
+									<th class="board-subject"><fmt:message key="board-subject-th" /></th>
+									<th class="board-date"><fmt:message key="board-regist-date-th" /></th>
+									<th class="board-date"><fmt:message key="board-update-date-th" /></th>
+									<th class="board-hit"><fmt:message key="board-hit-th" /></th>
+									<th class="board-name"><fmt:message key="board-writer-th" /></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -87,7 +95,7 @@
 								if (boardlist.isEmpty()) {
 								%>
 								<tr>
-									<td colspan="6" class="table-empty">게시글이 없습니다.</td>
+									<td colspan="6" class="table-empty"><fmt:message key="board-no-post" /></td>
 								</tr>
 								<%
 								}
@@ -102,7 +110,10 @@
 					<c:set value="<%=pageNum%>" var="pageNum" />
 					<c:set value="<%=total_page%>" var="totalPage" />
 					<c:if test="${totalPage > 0}">
-						<nav aria-label="게시판 페이지">
+						<fmt:message key="board-page-nav-aria" var="boardPageNavAria" />
+						<fmt:message key="prev-btn" var="boardPrevAria" />
+						<fmt:message key="board-next-aria" var="boardNextAria" />
+						<nav aria-label="${boardPageNavAria}">
 							<ul class="pagination mb-0">
 								<%-- 이전 --%>
 								<c:choose>
@@ -114,7 +125,7 @@
 												<c:param name="text" value="${param.text}" />
 											</c:if>
 										</c:url>
-										<li class="page-item"><a class="page-link" href="${prevUrl}" aria-label="이전">&laquo;</a></li>
+										<li class="page-item"><a class="page-link" href="${prevUrl}" aria-label="${boardPrevAria}">&laquo;</a></li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item disabled"><span class="page-link">&laquo;</span></li>
@@ -150,7 +161,7 @@
 												<c:param name="text" value="${param.text}" />
 											</c:if>
 										</c:url>
-										<li class="page-item"><a class="page-link" href="${nextUrl}" aria-label="다음">&raquo;</a></li>
+										<li class="page-item"><a class="page-link" href="${nextUrl}" aria-label="${boardNextAria}">&raquo;</a></li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item disabled"><span class="page-link">&raquo;</span></li>
@@ -164,7 +175,7 @@
 						<c:url value="/BoardWriteForm.do" var="writeUrl">
 							<c:param name="id" value="${sessionId}" />
 						</c:url>
-						<a href="${writeUrl}" class="text-end btn btn-primary board-write-btn">글 작성</a>
+						<a href="${writeUrl}" class="text-end btn btn-primary board-write-btn"><fmt:message key="board-write-btn" /></a>
 					</c:if>
 				</div>
 
@@ -176,3 +187,4 @@
 	<%@ include file="/footer.jsp"%>
 </body>
 </html>
+</fmt:bundle>

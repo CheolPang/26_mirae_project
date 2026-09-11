@@ -40,16 +40,23 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 mb-5 mb-md-0">
-					<h2 class="h3 mb-3 text-black">상품 정보 입력</h2>
+					<h2 class="h3 mb-3 text-black"><fmt:message key="add-product-heading" /></h2>
 					<%-- processAddProduct.jsp 가 저장에 실패하면 error 를 붙여 이 페이지로 돌려보낸다 --%>
 					<% if ("dup".equals(request.getParameter("error"))) { %>
-					<div class="alert alert-danger" role="alert">이미 등록된 상품 코드입니다. 다른 상품 코드를 입력해 주세요.</div>
+					<div class="alert alert-danger" role="alert"><fmt:message key="error-dup" /></div>
 					<% } else if ("upload".equals(request.getParameter("error"))) { %>
-					<div class="alert alert-danger" role="alert">이미지를 올리지 못했습니다. 5MB 이하의 이미지를 선택해 주세요.</div>
+					<div class="alert alert-danger" role="alert"><fmt:message key="error-upload-image" /></div>
 					<% } else if ("db".equals(request.getParameter("error"))) { %>
-					<div class="alert alert-danger" role="alert">상품을 저장하지 못했습니다. 상품 설명(한글 약 160자) 등 입력한 내용의 길이를 확인해 주세요.</div>
+					<div class="alert alert-danger" role="alert"><fmt:message key="error-db-save" /></div>
 					<% } %>
 					<div class="p-3 p-lg-5 border bg-white signForm">
+						<fmt:message key="ph-productId" var="phProductId" />
+						<fmt:message key="ph-pname" var="phPname" />
+						<fmt:message key="ph-unitPrice" var="phUnitPrice" />
+						<fmt:message key="ph-description" var="phDescription" />
+						<fmt:message key="ph-manufacturer" var="phManufacturer" />
+						<fmt:message key="ph-category" var="phCategory" />
+						<fmt:message key="ph-unitsInStock" var="phUnitsInStock" />
 						<form action="./processAddProduct.jsp" name="newProduct"
 							method="POST" enctype="multipart/form-data">
 							<div class="form-group row">
@@ -57,7 +64,7 @@
 									<label for="productId" class="text-black"><fmt:message key="productId" /> <span
 										class="text-danger">*</span></label> <input type="text"
 										class="form-control" id="productId" name="productId"
-										placeholder="상품 코드를 입력하세요. (예: P1237)">
+										placeholder="${phProductId}">
 								</div>
 							</div>
 							<div class="form-group row">
@@ -65,7 +72,7 @@
 									<label for="productName" class="text-black"><fmt:message key="pname" /> <span
 										class="text-danger">*</span></label> <input type="text"
 										class="form-control" id="productName" name="productName"
-										placeholder="상품명을 입력하세요.">
+										placeholder="${phPname}">
 								</div>
 							</div>
 							<div class="form-group row">
@@ -73,28 +80,28 @@
 									<label for="unitPrice" class="text-black"><fmt:message key="unitPrice" /> <span
 										class="text-danger">*</span></label> <input type="text"
 										class="form-control" id="unitPrice" name="unitPrice"
-										placeholder="상품 가격을 입력하세요.">
+										placeholder="${phUnitPrice}">
 								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
 									<label for="description" class="text-black"><fmt:message key="description" /></label>
 									<textarea rows="5" class="form-control" id="description"
-										name="description" placeholder="상품에 대한 상세정보를 입력하세요."></textarea>
+										name="description" placeholder="${phDescription}"></textarea>
 								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
 									<label for="manufacturer" class="text-black"><fmt:message key="manufacturer" /></label>
 									<input type="text" class="form-control" id="manufacturer"
-										name="manufacturer" placeholder="제조사를 입력하세요.">
+										name="manufacturer" placeholder="${phManufacturer}">
 								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
 									<label for="category" class="text-black"><fmt:message key="category" /></label>
 									<input type="text" class="form-control" id="category"
-										name="category" placeholder="상품 분류를 입력하세요.">
+										name="category" placeholder="${phCategory}">
 								</div>
 							</div>
 							<div class="form-group row">
@@ -102,7 +109,7 @@
 									<label for="unitsInStock" class="text-black"><fmt:message key="unitsInStock" /> <span
 										class="text-danger">*</span></label> <input type="text"
 										class="form-control" id="unitsInStock" name="unitsInStock"
-										placeholder="재고 수량을 입력하세요.">
+										placeholder="${phUnitsInStock}">
 								</div>
 							</div>
 							<div class="form-group row">

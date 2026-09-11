@@ -1,24 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	// footer.jsp에서 include 되므로, footer.jsp를 포함하는 모든 페이지에 자동으로 뜬다.
-	// 로그인 여부는 다른 페이지들과 동일하게 session의 "sessionId" 속성으로 판단한다.
 	String aiSessionId = (String) session.getAttribute("sessionId");
 	boolean aiLoggedIn = (aiSessionId != null);
 %>
-<!-- Start AI 상품 추천 챗봇 위젯 -->
+<!-- Start AI 상품 추천 챗봇 위젯 (Bootstrap 5 Offcanvas) -->
 <div id="aiChatRoot" data-logged-in="<%=aiLoggedIn%>" data-action-url="<%=request.getContextPath()%>/AiChatAction.do">
-	<button type="button" id="aiChatToggleBtn" aria-label="AI 상품 추천 챗봇 열기">AI</button>
+	<button type="button" id="aiChatToggleBtn"
+		class="ai-chat-brand btn rounded-circle position-fixed shadow d-flex align-items-center justify-content-center p-0"
+		style="right: 24px; bottom: 24px; z-index: 1050;"
+		data-bs-toggle="offcanvas" data-bs-target="#aiChatPanel" aria-controls="aiChatPanel"
+		aria-label="AI 챗봇 열기">AI</button>
 
-	<div id="aiChatPanel" hidden>
-		<div id="aiChatPanelHeader">
-			<span>CPShop AI 추천</span>
-			<button type="button" id="aiChatCloseBtn" aria-label="닫기">&times;</button>
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="aiChatPanel" aria-labelledby="aiChatPanelLabel"
+		data-bs-scroll="true" data-bs-backdrop="false">
+		<div class="offcanvas-header ai-chat-brand">
+			<h5 class="offcanvas-title" id="aiChatPanelLabel">CPShop AI</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="닫기"></button>
 		</div>
-		<div id="aiChatMessages"></div>
-		<div id="aiChatInputBar">
-			<input type="text" id="aiChatInput" placeholder="메시지를 입력하세요" maxlength="500" autocomplete="off">
-			<button type="button" id="aiChatSendBtn">전송</button>
+		<div class="offcanvas-body d-flex flex-column p-0">
+			<div id="aiChatMessages" class="flex-grow-1 overflow-auto p-3 d-flex flex-column gap-2"></div>
+			<div id="aiChatInputBar" class="d-flex gap-2 p-2 border-top">
+				<input type="text" id="aiChatInput" class="form-control rounded-pill" placeholder="메시지를 입력하세요" maxlength="500" autocomplete="off">
+				<button id="aiChatSendBtn" class="ai-chat-brand btn rounded-pill">
+										<span class="fa fa-paper-plane"></span>
+									</button>
+			</div>
 		</div>
 	</div>
 </div>

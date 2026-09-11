@@ -5,22 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 아주 작은 JSON 파서/이스케이프 유틸리티.
- *
- * 이 프로젝트(WEB-INF/lib)에는 Gson/Jackson 같은 JSON 라이브러리가 없어서,
- * AI 채팅 기능(AiChatController ↔ 브라우저, AiChatController ↔ Ollama)에 필요한
- * 최소한의 JSON 읽기/쓰기만 직접 구현한다.
- *
- * 지원 타입: object(Map), array(List), string, number(Double), boolean, null.
- * 표준 JSON 문법을 따르되, 이 프로젝트에서 주고받는 정도의 크기/형태만 다루면 되므로
- * 성능보다는 정확성과 단순함을 우선한다.
- */
 public class MiniJson {
 
-	// ------------------------------------------------------------------
-	// 파싱 (문자열 -> Map/List/String/Double/Boolean/null)
-	// ------------------------------------------------------------------
 	public static Object parse(String json) {
 		Parser p = new Parser(json);
 		p.skipWhitespace();
@@ -148,7 +134,7 @@ public class MiniJson {
 								try {
 									sb.append((char) Integer.parseInt(hex, 16));
 								} catch (NumberFormatException ignore) {
-									// 잘못된 \\u 시퀀스는 무시
+
 								}
 								i += 4;
 							}
@@ -191,9 +177,6 @@ public class MiniJson {
 		}
 	}
 
-	// ------------------------------------------------------------------
-	// 이스케이프 (JSON 문자열 리터럴로 안전하게 쓰기 위한 용도)
-	// ------------------------------------------------------------------
 	public static String escape(String value) {
 		if (value == null) {
 			return "";

@@ -6,6 +6,9 @@
 <%@page import="mvc.database.DBConnection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value='<%=request.getParameter("language")%>' />
+<fmt:bundle basename="bundle.message">
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +55,7 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>주문 완료</h1>
+						<h1><fmt:message key="order-complete-title" /></h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
@@ -66,20 +69,20 @@
 			<div class="row mb-5">
 				<div class='alert alert-success' role='alert'>
 					<h3>
-						<b>주문해주셔서 감사합니다.</b>
+						<b><fmt:message key="thank-you-title" /></b>
 					</h3>
 					<h6 class="mt-2 mb-0">
-						<b>주문이 정상적으로 처리되어 예정된 날짜에 상품이 배송될 예정입니다.</b>
+						<b><fmt:message key="order-processed-msg" /></b>
 					</h6>
 				</div>
 				<h5 class="mt-3">
-					주문번호 :
+					<fmt:message key="order-number-label" /> :
 					<%=Shipping_cartId%></h5>
 				<h5>
-					배송 예정 날짜 :
+					<fmt:message key="expected-delivery-label" /> :
 					<%=Shipping_date%></h5>
 			</div>
-			<a href="./products.jsp" class="btn btn-primary">상품 목록으로 이동</a>
+			<a href="./products.jsp" class="btn btn-primary"><fmt:message key="go-to-products" /></a>
 		</div>
 	</div>
 
@@ -88,7 +91,7 @@
 		// 로그인한 회원이면 구매 이력(bs_purchase_history)에 남긴다.
 		// AI 상품 추천 기능(추후 작업)이 회원별 실제 구매 내역을 읽어올 수 있도록 하기 위함.
 		// 게스트(비로그인) 주문은 회원 아이디가 없으므로 이력을 남기지 않는다.
-		String sessionId = (String) session.getAttribute("sessionId");
+		sessionId = (String) session.getAttribute("sessionId");
 		ArrayList<Product> purchasedList = (ArrayList<Product>) session.getAttribute("cartlist");
 		if (sessionId != null && purchasedList != null && !purchasedList.isEmpty()) {
 			Connection phConn = null;
@@ -146,3 +149,4 @@
 	%>
 </body>
 </html>
+</fmt:bundle>

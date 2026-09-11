@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value='<%=request.getParameter("language")%>' />
+<fmt:bundle basename="bundle.message">
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +16,7 @@
 				<div>
 					<ul class="nav justify-content-center" id="titleLine">
 						<li class="nav-item text-success">
-							<h1><b>페이지 오류</b></h1>
+							<h1><b><fmt:message key="error-page-title" /></b></h1>
 						</li>
 					</ul>
 				</div>
@@ -22,11 +25,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col p-5 flexcenter">
-					<h2>페이지를 찾을 수 없습니다.</h2>
-					<a href="./products.jsp" class="btn btn-primary" role="button">상품 목록</a>
+					<h2><fmt:message key="error-page-not-found" /></h2>
+					<a href="./products.jsp" class="btn btn-primary" role="button"><fmt:message key="menu-product-list" /></a>
 				</div>
 			</div>
 		</div>
 	<%@ include file="footer.jsp" %>
 </body>
 </html>
+</fmt:bundle>

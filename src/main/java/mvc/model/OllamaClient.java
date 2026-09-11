@@ -110,6 +110,11 @@ public class OllamaClient {
 		sb.append("{");
 		sb.append("\"model\":\"").append(MiniJson.escape(model)).append("\",");
 		sb.append("\"stream\":false,");
+		// qwen3처럼 "thinking" 기능이 있는 모델은 기본적으로 답하기 전에 긴 추론 과정을
+		// 거치는데, 이게 몇십 초씩 걸려 아래 OLLAMA_TIMEOUT(18초)을 거의 항상 넘겨버린다.
+		// think:false로 꺼서 바로 답만 받는다. (이 필드는 thinking을 지원하지 않는
+		// 모델에서는 그냥 무시되므로 다른 모델에 영향 없음)
+		sb.append("\"think\":false,");
 		sb.append("\"messages\":[");
 		for (int i = 0; i < messages.size(); i++) {
 			Map<String, String> m = messages.get(i);

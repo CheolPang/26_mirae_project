@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="dto.Product" %>
 <%@ page import="dao.ProductDAO" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%!
 	private String nvl(String s) {
 		return s == null ? "" : s.trim();
@@ -20,6 +21,8 @@
 <title>CPShop | 상품 목록</title>
 </head>
 <body>
+	<fmt:setLocale value='<%=request.getParameter("language")%>' />
+	<fmt:bundle basename="bundle.message">
 	<%@ include file="menu.jsp" %>
 	<!-- Start Hero Section -->
 	<div class="hero">
@@ -27,7 +30,7 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>상품 목록</h1>
+						<h1><fmt:message key="menu-product-list" /></h1>
 					</div>
 				</div>
 				<div class="col-lg-7"></div>
@@ -38,7 +41,7 @@
 
 	<div class="shop-section">
 		<div class="container">
-			<p class="shop-count">전체 <strong><%=productList.size() %></strong>개</p>
+			<p class="shop-count"><fmt:message key="shop-count"><fmt:param value="<%=productList.size()%>"/></fmt:message></p>
 
 			<div class="product-grid">
 				<%
@@ -49,13 +52,13 @@
 					<div class="product-card-thumb">
 						<img src="${pageContext.request.contextPath}/upload/<%=product.getFilename() %>" alt="<%=nvl(product.getPname()) %>" loading="lazy">
 						<% if (product.getUnitsInStock() <= 0) { %>
-						<span class="product-soldout">품절</span>
+						<span class="product-soldout"><fmt:message key="sold-out" /></span>
 						<% } %>
 					</div>
 					<div class="product-card-body">
 						<div class="product-brand"><%=nvl(product.getManufacturer()) %></div>
 						<div class="product-card-name"><%=nvl(product.getPname()) %></div>
-						<div class="product-card-price"><%=df.format(product.getUnitPrice()) %>원</div>
+						<div class="product-card-price"><%=df.format(product.getUnitPrice()) %><fmt:message key="currency-won" /></div>
 					</div>
 				</a>
 				<%
@@ -65,5 +68,6 @@
 		</div>
 	</div>
 	<%@ include file="footer.jsp" %>
+	</fmt:bundle>
 </body>
 </html>
