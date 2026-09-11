@@ -76,9 +76,10 @@
 
 			</div>
 		</footer>
-		<!-- End Footer Section -->	
+		<!-- End Footer Section -->
 	<script src="<%=request.getContextPath()%>/js/bootstrap.bundle.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/tiny-slider.js"></script>
 	<script src="<%=request.getContextPath()%>/js/custom.js"></script>
 	<script src="<%=request.getContextPath()%>/js/validation.js"></script>
 	<script src="<%=request.getContextPath()%>/js/basket.js"></script>
+	<%@ include file="aiChatWidget.jsp"%>

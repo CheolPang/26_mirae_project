@@ -51,7 +51,7 @@ CREATE TABLE bs_product(
 create table bs_board(
     num number primary key,        -- 게시글 순번 (bs_num 시퀀스)
     id varchar2(20) not null,      -- 회원 아이디
-    name varchar2(20) not null,    -- 회원 이름
+    name varchar2(30) not null,    -- 회원 이름 (bs_member.name 과 같은 크기여야 긴 이름도 글을 쓸 수 있다)
     subject varchar2(100) not null, -- 게시글 제목
     content varchar2(1000) not null, -- 게시글 내용
     hit number,                    -- 게시글 조회 수
@@ -61,3 +61,19 @@ create table bs_board(
 );
 
 create sequence bs_num nocycle nocache;
+
+
+-- ---------------------------------------------------------------------
+-- 구매 이력 (thanksCustomer.jsp에서 로그인 회원의 주문 완료 시 적재)
+-- AI 상품 추천 기능이 회원별로 실제 구매한 상품을 조회할 때 사용 (추천 기능 자체는 별도 작업)
+-- ---------------------------------------------------------------------
+create table bs_purchase_history(
+    num number primary key,          -- 구매 내역 순번 (bs_purchase_num 시퀀스)
+    id varchar2(20) not null,        -- 회원 아이디 (bs_member.id)
+    p_id varchar2(500) not null,     -- 상품 코드 (bs_product.p_id)
+    quantity number not null,        -- 구매 수량
+    purchase_price number not null,  -- 구매 당시 단가 (p_unitPrice)
+    purchase_day date default sysdate  -- 구매(주문완료) 일시
+);
+
+create sequence bs_purchase_num nocycle nocache;

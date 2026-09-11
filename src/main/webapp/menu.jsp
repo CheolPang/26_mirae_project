@@ -4,6 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String sessionId = (String) session.getAttribute("sessionId");
+
+	// 언어 링크: "?language=ko" 만 쓰면 현재 주소의 파라미터(num, pageNum, id ...)가 사라져
+	// 게시글 보기 등에서 500 에러가 나므로, 기존 파라미터는 두고 language 만 바꾼다.
+	String langQuery = request.getQueryString() == null ? ""
+			: request.getQueryString().replaceAll("(^|&)language=[^&]*", "").replaceFirst("^&", "");
+	String langHref = ("?" + (langQuery.isEmpty() ? "" : langQuery + "&") + "language=")
+			.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;");
 %>
 <head>
 	<meta charset="UTF-8">
@@ -101,8 +108,8 @@
 						            언어
 						          </a>
 						          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarLangDropdownLink">
-						            <li><a class="dropdown-item" href="?language=ko">Korean</a></li>
-						            <li><a class="dropdown-item" href="?language=en">English</a></li>
+						            <li><a class="dropdown-item" href="<%=langHref %>ko">Korean</a></li>
+						            <li><a class="dropdown-item" href="<%=langHref %>en">English</a></li>
 						          </ul>
 						        </li>
 					</ul>

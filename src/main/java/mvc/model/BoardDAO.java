@@ -242,10 +242,13 @@ public class BoardDAO {
 		return name;
 	}
 	
-	public void insertBoard(BoardDTO board) {
+	// 저장에 성공하면 true. 길이 초과(ORA-12899) 등으로 실패하면 false 를 돌려줘서
+	// 컨트롤러가 글이 조용히 사라지지 않게 처리할 수 있게 한다.
+	public boolean insertBoard(BoardDTO board) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+		boolean success = false;
+
 		try {
 			conn = DBConnection.getConnection();
 			String sql = "insert into bs_board values (bs_num.nextval, ?,?,?,?,?,?,sysdate,sysdate)";
@@ -258,7 +261,7 @@ public class BoardDAO {
 			pstmt.setInt(5, board.getHit());
 			pstmt.setString(6, board.getIp());
 
-			pstmt.executeUpdate();
+			success = pstmt.executeUpdate() == 1;
 		} catch (Exception e) {
 			System.out.println("insertBoard() 에러 : " + e);
 		} finally {
@@ -271,6 +274,7 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
+		return success;
 	}
 	
 	public BoardDTO getBoardByNum(int num, int page) {
@@ -318,9 +322,11 @@ public class BoardDAO {
 		return board;
 	}
 	
-	public void updateBoard(BoardDTO board) {
+	// insertBoard 와 같이 성공 여부를 돌려준다.
+	public boolean updateBoard(BoardDTO board) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		boolean success = false;
 
 		try {
 			conn = DBConnection.getConnection();
@@ -331,7 +337,7 @@ public class BoardDAO {
 			pstmt.setString(2, board.getContent());
 			pstmt.setInt(3, board.getNum());
 
-			pstmt.executeUpdate();
+			success = pstmt.executeUpdate() == 1;
 		} catch (Exception e) {
 			System.out.println("updateBoard() 에러 : " + e);
 		} finally {
@@ -344,6 +350,7 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
+		return success;
 	}
 
 	public void deleteBoard(int num) {

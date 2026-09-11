@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +14,10 @@
 		}
 		if(!document.newWrite.content.value) {
 			alert("내용을 입력해주세요.");
+			return false;
+		}
+		// bs_board.subject 100바이트 / content 1000바이트
+		if(!checkBytes(document.newWrite.subject, 100, "제목") || !checkBytes(document.newWrite.content, 1000, "내용")) {
 			return false;
 		}
 		document.newWrite.submit();
@@ -46,6 +51,9 @@
 					<h2 class="h3 mb-3 text-black">글 작성</h2>
 					<div class="p-3 p-lg-5 border bg-white signForm">
 						<form name="newWrite" action="./BoardWriteAction.do" method="post" onsubmit="return checkForm()">
+							<c:if test="${not empty errorMsg}">
+								<div class="alert alert-danger" role="alert">${errorMsg}</div>
+							</c:if>
 							<input type="hidden" id="id" name="id" value="${sessionId}">
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
@@ -57,14 +65,15 @@
 								<div class="col-md-12 mb-3">
 									<label for="subject" class="text-black">제목 <span
 										class="text-danger">*</span></label> <input type="text"
-										class="form-control" id="subject" name="subject" placeholder="제목을 입력하세요.">
+										class="form-control" id="subject" name="subject" placeholder="제목을 입력하세요." value="<c:out value='${param.subject}'/>">
 								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
 									<label for="content" class="text-black">내용 <span
 										class="text-danger">*</span></label>
-									<textarea class="form-control" name="content" id="content" rows="15" placeholder="내용을 입력하세요."></textarea>
+									<%-- 저장에 실패해 돌아온 경우(BoardWriteAction.do) 입력했던 값을 다시 채운다 --%>
+									<textarea class="form-control" name="content" id="content" rows="15" placeholder="내용을 입력하세요."><c:out value="${param.content}"/></textarea>
 								</div>
 							</div>
 

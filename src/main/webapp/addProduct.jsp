@@ -41,6 +41,14 @@
 			<div class="row">
 				<div class="col-md-12 mb-5 mb-md-0">
 					<h2 class="h3 mb-3 text-black">상품 정보 입력</h2>
+					<%-- processAddProduct.jsp 가 저장에 실패하면 error 를 붙여 이 페이지로 돌려보낸다 --%>
+					<% if ("dup".equals(request.getParameter("error"))) { %>
+					<div class="alert alert-danger" role="alert">이미 등록된 상품 코드입니다. 다른 상품 코드를 입력해 주세요.</div>
+					<% } else if ("upload".equals(request.getParameter("error"))) { %>
+					<div class="alert alert-danger" role="alert">이미지를 올리지 못했습니다. 5MB 이하의 이미지를 선택해 주세요.</div>
+					<% } else if ("db".equals(request.getParameter("error"))) { %>
+					<div class="alert alert-danger" role="alert">상품을 저장하지 못했습니다. 상품 설명(한글 약 160자) 등 입력한 내용의 길이를 확인해 주세요.</div>
+					<% } %>
 					<div class="p-3 p-lg-5 border bg-white signForm">
 						<form action="./processAddProduct.jsp" name="newProduct"
 							method="POST" enctype="multipart/form-data">

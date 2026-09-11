@@ -23,6 +23,18 @@
 
 <sql:setDataSource var="dataSource" url="jdbc:oracle:thin:@localhost:1521:xe" driver="oracle.jdbc.driver.OracleDriver" user="C##dbexam" password="m1234"/>
 
+<%-- 이미 있는 아이디면 insert 가 unique 제약에 걸려 500 에러가 나므로 먼저 확인한다.
+     forward 는 요청 파라미터가 그대로 넘어가서 가입 폼에 입력값이 다시 채워진다. --%>
+<sql:query dataSource="${dataSource}" var="dupCheck">
+	select count(*) as cnt from bs_member where id=?
+	<sql:param value="<%=id %>"/>
+</sql:query>
+<c:if test="${dupCheck.rows[0].cnt > 0}">
+	<jsp:forward page="addMember.jsp?error=dup"/>
+</c:if>
+
+<%-- 칼럼 크기 초과 등으로 insert 가 실패해도 500 에러 대신 가입 폼으로 돌려보낸다 --%>
+<c:catch var="insertError">
 <sql:update dataSource="${dataSource}" var="resultSet">
 	insert into bs_member values(?,?,?,?,?,?,?,?, sysdate, bs_seq_num.nextval, sysdate, sysdate)
 	<sql:param value="<%=id %>"/>
@@ -34,6 +46,11 @@
 	<sql:param value="<%=phone %>"/>
 	<sql:param value="<%=address %>"/>
 </sql:update>
+</c:catch>
+<c:if test="${insertError != null}">
+	<% System.out.println("processAddMember 에러 : " + pageContext.getAttribute("insertError")); %>
+	<jsp:forward page="addMember.jsp?error=fail"/>
+</c:if>
 
 <c:if test="${resultSet>=1}">
 	<c:redirect url="resultMember.jsp?msg=1"/>

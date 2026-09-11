@@ -1,4 +1,9 @@
 <%@page import="java.net.URLDecoder"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="dto.Product"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="mvc.database.DBConnection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -80,6 +85,39 @@
 
 	<%@ include file="footer.jsp"%>
 	<%
+		// 로그인한 회원이면 구매 이력(bs_purchase_history)에 남긴다.
+		// AI 상품 추천 기능(추후 작업)이 회원별 실제 구매 내역을 읽어올 수 있도록 하기 위함.
+		// 게스트(비로그인) 주문은 회원 아이디가 없으므로 이력을 남기지 않는다.
+		String sessionId = (String) session.getAttribute("sessionId");
+		ArrayList<Product> purchasedList = (ArrayList<Product>) session.getAttribute("cartlist");
+		if (sessionId != null && purchasedList != null && !purchasedList.isEmpty()) {
+			Connection phConn = null;
+			PreparedStatement phStmt = null;
+			try {
+				phConn = DBConnection.getConnection();
+				String phSql = "insert into bs_purchase_history(num, id, p_id, quantity, purchase_price) "
+						+ "values(bs_purchase_num.nextval, ?, ?, ?, ?)";
+				phStmt = phConn.prepareStatement(phSql);
+				for (int i = 0; i < purchasedList.size(); i++) {
+					Product purchasedProduct = purchasedList.get(i);
+					phStmt.setString(1, sessionId);
+					phStmt.setString(2, purchasedProduct.getProductId());
+					phStmt.setInt(3, purchasedProduct.getQuantity());
+					phStmt.setInt(4, purchasedProduct.getUnitPrice());
+					phStmt.executeUpdate();
+				}
+			} catch (Exception e) {
+				System.out.println("구매 이력 저장 에러 : " + e);
+			} finally {
+				try {
+					if (phStmt != null) phStmt.close();
+					if (phConn != null) phConn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		// 주문이 끝났으므로 장바구니만 비운다.
 		// 예전에는 session.invalidate()로 세션 전체를 없애서
 		// 로그인 정보(sessionId)까지 함께 날아가 로그아웃되는 문제가 있었다.

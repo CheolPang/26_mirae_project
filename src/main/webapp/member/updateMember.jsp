@@ -29,6 +29,13 @@
 			alert("이름을 입력해주세요.")
 			return false;
 		}
+		// bs_member 칼럼 크기(바이트)를 넘으면 수정이 실패하므로 미리 막는다
+		const f = document.newMember;
+		if (!checkBytes(f.pw, 20, "비밀번호") || !checkBytes(f.name, 30, "이름")
+				|| !checkBytes(f.email, 30, "이메일") || !checkBytes(f.contact, 30, "전화번호")
+				|| !checkBytes(f.address, 100, "주소")) {
+			return false;
+		}
 		document.newMember.submit();
 	}
 </script>
@@ -70,6 +77,9 @@
 					<h2 class="h3 mb-3 text-black">회원 정보 입력</h2>
 					<div class="p-3 p-lg-5 border bg-white signForm">
 						<form name="newMember" action="processUpdateMember.jsp" method="POST">
+							<c:if test="${param.error eq '1'}">
+								<div class="alert alert-danger" role="alert">회원정보를 수정하지 못했습니다. 입력한 내용의 길이를 확인해 주세요.</div>
+							</c:if>
 							<div class="form-group row">
 								<div class="col-md-12 mb-3">
 									<label for="email" class="text-black">이메일 <span

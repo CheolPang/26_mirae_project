@@ -58,7 +58,14 @@
 	<div class="shop-section">
 		<div class="container">
 			<h2 class="h3 mb-3 text-black">상품 정보 수정</h2>
-			<form action="./processUpdateProduct.jsp" name="updateProduct" method="POST" enctype="multipart/form-data">
+			<%-- processUpdateProduct.jsp 가 저장에 실패하면 error 를 붙여 이 페이지로 돌려보낸다 --%>
+			<% if ("upload".equals(request.getParameter("error"))) { %>
+			<div class="alert alert-danger" role="alert">이미지를 올리지 못했습니다. 5MB 이하의 이미지를 선택해 주세요.</div>
+			<% } else if ("db".equals(request.getParameter("error"))) { %>
+			<div class="alert alert-danger" role="alert">상품 정보를 저장하지 못했습니다. 상품 설명(한글 약 160자) 등 입력한 내용의 길이를 확인해 주세요.</div>
+			<% } %>
+			<%-- 업로드가 실패하면 본문(productId)을 읽을 수 없으므로 상품 코드를 주소에도 붙여 둔다 --%>
+			<form action="./processUpdateProduct.jsp?id=<%=product.getProductId() %>" name="updateProduct" method="POST" enctype="multipart/form-data">
 				<div class="row g-5">
 					<!-- 왼쪽 : 상품 상세와 같은 이미지 영역 -->
 					<div class="col-lg-5">
